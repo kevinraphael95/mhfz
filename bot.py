@@ -89,8 +89,8 @@ async def on_ready():
     print(f"✅ Connecté en tant que {bot.user.name}")
     await bot.change_presence(
         activity=discord.Activity(
-            type=discord.ActivityType.watching,
-            name="Bleach"
+            type=discord.ActivityType.playing,
+            name="Monster Hunter Frontier Z"
         )
     )
 
@@ -107,8 +107,7 @@ async def on_message(message):
         embed = discord.Embed(
             title="Coucou !",
             description=(
-                f"⚠ BOT EN TRAVAUX pour ne plus utiliser supabase mais une base de données locale.\n"
-                f"Bonjour ! Je suis **Kisuke Urahara**, un bot discord inspiré du manga Bleach.\n"
+                f"Monster Hunter Frontier Z.\n"
                 f"• Utilise la commande `{prefix}help` pour avoir la liste des commandes du bot "
                 f"ou `{prefix}help <commande>` pour en avoir une description."
             ),
