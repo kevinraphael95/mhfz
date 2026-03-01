@@ -1,0 +1,59 @@
+# ────────────────────────────────────────────────────────────────────────────────
+# 📌 start.sh
+# Objectif : Lancer le bot Discord + Cloudflare Tunnel
+# Catégorie : Système
+# Accès : Admin / Local
+# Cooldown : Aucun
+# ────────────────────────────────────────────────────────────────────────────────
+
+# ────────────────────────────────────────────────────────────────────────────────
+# ⚙️ Configuration
+# ────────────────────────────────────────────────────────────────────────────────
+ADMIN_PORT=5050
+
+# ────────────────────────────────────────────────────────────────────────────────
+# 🚀 Initialisation
+# ────────────────────────────────────────────────────────────────────────────────
+echo "════════════════════════════════════════"
+echo "  KISUKE BOT — DÉMARRAGE"
+echo "════════════════════════════════════════"
+
+# ────────────────────────────────────────────────────────────────────────────────
+# 🌐 Vérification / Installation de Cloudflared
+# ────────────────────────────────────────────────────────────────────────────────
+if ! command -v cloudflared &> /dev/null; then
+  echo "⚠️  cloudflared non trouvé. Installation..."
+
+  # Installation via Termux (ARM)
+  pkg install cloudflared -y 2>/dev/null || \
+
+  # Installation manuelle (ARM64)
+  wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64 -O cloudflared && \
+  chmod +x cloudflared && \
+  mv cloudflared $PREFIX/bin/
+fi
+
+# ────────────────────────────────────────────────────────────────────────────────
+# 🔗 Lancement du Tunnel Cloudflare
+# ────────────────────────────────────────────────────────────────────────────────
+echo "🌐 Lancement de Cloudflare Tunnel sur le port $ADMIN_PORT..."
+cloudflared tunnel --url http://localhost:$ADMIN_PORT --no-autoupdate 2>&1 | grep -E "https://" &
+TUNNEL_PID=$!
+
+# Attente du démarrage du tunnel
+sleep 3
+
+echo ""
+echo "✅ Tunnel actif — cherche l'URL https://*.trycloudflare.com ci-dessus"
+echo ""
+
+# ────────────────────────────────────────────────────────────────────────────────
+# 🤖 Lancement du Bot Discord
+# ────────────────────────────────────────────────────────────────────────────────
+echo "🤖 Lancement du bot..."
+python bot.py
+
+# ────────────────────────────────────────────────────────────────────────────────
+# 🧹 Nettoyage à la fermeture
+# ────────────────────────────────────────────────────────────────────────────────
+kill $TUNNEL_PID 2>/dev/null
