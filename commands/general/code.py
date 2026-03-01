@@ -23,7 +23,7 @@ class CodeCommand(commands.Cog):
     """
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.github_url = "https://github.com/kevinraphael95/kisuke"
+        self.github_url = "https://github.com/kevinraphael95/mhfz"
 
     # ────────────────────────────────────────────────────────────────────────────
     # 🔹 Fonction interne commune
