@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monster Guessr — Monster Hunter Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0805;--surface:#13100c;--surface2:#1e1912;--border:#3a2e1e;--accent:#c8832a;--accent2:#e8a84a;--text:#e8dcc8;--text-dim:#8a7a60;--correct:#1a3a25;--wrong:#3a1515;--close:#3a2e00;--cb:#27a35a;--wb:#c0392b;--lb:#d4a017}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{width:100%;max-width:960px;padding:32px 20px 16px;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:1}
+.logo-row{display:flex;align-items:center;gap:14px}
+.logo-icon{font-size:36px;animation:pg 3s ease-in-out infinite}
+@keyframes pg{0%,100%{filter:drop-shadow(0 0 10px #c8832a66)}50%{filter:drop-shadow(0 0 22px #c8832aaa)}}
+h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(22px,5vw,38px);letter-spacing:.08em;background:linear-gradient(135deg,#c8832a,#e8a84a,#c8832a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{font-family:'Crimson Pro',serif;font-style:italic;color:var(--text-dim);font-size:14px;letter-spacing:.15em}
+.divider{width:100%;max-width:700px;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--accent),var(--border),transparent);margin:12px 0;position:relative}
+.divider::after{content:'⚔';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--bg);padding:0 10px;color:var(--accent);font-size:14px}
+main{width:100%;max-width:960px;padding:0 16px 40px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:16px}
+.timer-bar{display:flex;gap:24px;align-items:center;font-family:'Cinzel',serif;font-size:13px;color:var(--text-dim);letter-spacing:.1em}
+.timer-bar span{color:var(--accent2)}
+.input-area{width:100%;max-width:620px;display:flex;gap:10px}
+.autocomplete-wrap{position:relative;flex:1}
+.guess-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Cinzel',serif;font-size:14px;padding:12px 18px;outline:none;border-radius:2px;letter-spacing:.05em;transition:border-color .2s}
+.guess-input:focus{border-color:var(--accent)}
+.guess-input::placeholder{color:var(--text-dim)}
+.guess-btn{background:linear-gradient(135deg,#a86820,#c8832a);border:none;color:#fff;font-family:'Cinzel',serif;font-size:13px;font-weight:700;padding:12px 24px;cursor:pointer;letter-spacing:.12em;border-radius:2px;transition:all .2s;text-transform:uppercase}
+.guess-btn:hover{background:linear-gradient(135deg,#c8832a,#e8a84a);transform:translateY(-1px)}
+.guess-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.autocomplete-list{position:absolute;top:100%;left:0;right:0;background:var(--surface2);border:1px solid var(--border);border-top:none;max-height:220px;overflow-y:auto;z-index:100;border-radius:0 0 2px 2px}
+.autocomplete-list:empty{display:none}
+.autocomplete-item{padding:10px 18px;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;color:var(--text);letter-spacing:.04em;transition:background .15s;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.autocomplete-item:hover,.autocomplete-item.selected{background:var(--surface);color:var(--accent2)}
+.autocomplete-item .gb{font-size:10px;color:var(--text-dim);margin-left:auto;white-space:nowrap}
+.guesses-container{width:100%;overflow-x:auto}
+.guesses-header{display:grid;grid-template-columns:180px repeat(6,1fr);gap:4px;margin-bottom:6px;padding:0 2px}
+.guesses-header div{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;color:var(--text-dim);text-align:center;text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border)}
+.guesses-header div:first-child{text-align:left;padding-left:8px}
+.guess-row{display:grid;grid-template-columns:180px repeat(6,1fr);gap:4px;margin-bottom:4px;animation:si .35s cubic-bezier(.2,.8,.3,1) both}
+@keyframes si{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.guess-cell{background:var(--surface2);border:1px solid var(--border);padding:10px 8px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.04em;border-radius:2px;min-height:48px;display:flex;align-items:center;justify-content:center}
+.guess-cell:first-child{text-align:left;justify-content:flex-start;padding-left:10px;font-size:12px}
+.guess-cell.correct{background:var(--correct);border-color:var(--cb);color:#6ee89a}
+.guess-cell.wrong{background:var(--wrong);border-color:var(--wb);color:#e87070}
+.guess-cell.close{background:var(--close);border-color:var(--lb);color:#e8c870}
+.arrow{font-size:9px;opacity:.9;margin-left:3px}
+.result-banner{width:100%;max-width:620px;padding:20px 28px;border:1px solid var(--accent);background:var(--surface2);border-radius:2px;text-align:center;display:none;flex-direction:column;gap:10px;animation:fu .5s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.result-banner.show{display:flex}
+.result-banner.win{border-color:var(--cb);background:#0d2018}
+.result-banner.lose{border-color:var(--wb);background:#1a0a0a}
+.result-title{font-family:'Cinzel',serif;font-size:22px;font-weight:900;letter-spacing:.1em}
+.result-banner.win .result-title{color:#6ee89a}
+.result-banner.lose .result-title{color:#e87070}
+.result-monster{font-family:'Cinzel',serif;font-size:16px;color:var(--accent2)}
+.result-desc{font-style:italic;color:var(--text-dim);font-size:14px;line-height:1.6}
+.next-timer{font-size:13px;color:var(--text-dim);letter-spacing:.08em;font-family:'Cinzel',serif}
+.next-timer span{color:var(--accent2);font-size:16px}
+.attempts-row{display:flex;gap:6px;align-items:center}
+.attempt-dot{width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);transition:all .3s}
+.attempt-dot.used{background:var(--accent);border-color:var(--accent2)}
+.attempt-dot.win{background:#27a35a;border-color:#4fdf8a}
+.attempt-dot.lose{background:var(--wb);border-color:#e87070}
+.share-btn{background:transparent;border:1px solid var(--accent);color:var(--accent2);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.12em;padding:8px 20px;cursor:pointer;transition:all .2s;text-transform:uppercase;border-radius:2px}
+.share-btn:hover{background:var(--accent);color:#fff}
+.help-toggle{font-family:'Cinzel',serif;font-size:11px;color:var(--text-dim);letter-spacing:.1em;cursor:pointer;text-decoration:underline;text-underline-offset:3px;background:none;border:none;transition:color .2s}
+.help-toggle:hover{color:var(--accent2)}
+.help-panel{max-width:620px;width:100%;background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:2px;display:none;flex-direction:column;gap:8px;font-size:13px;line-height:1.7;color:var(--text-dim)}
+.help-panel.open{display:flex}
+.help-panel strong{color:var(--accent2);font-family:'Cinzel',serif;font-size:12px}
+.legend-row{display:flex;gap:10px;align-items:center}
+.lb2{width:18px;height:18px;border-radius:2px;border:1px solid;flex-shrink:0}
+.lb2.g{background:var(--correct);border-color:var(--cb)}
+.lb2.y{background:var(--close);border-color:var(--lb)}
+.lb2.r{background:var(--wrong);border-color:var(--wb)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+@media(max-width:640px){.guesses-header,.guess-row{grid-template-columns:130px repeat(6,1fr)}.guess-cell{font-size:9px;padding:6px 3px;min-height:40px}.guess-cell:first-child{font-size:10px}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-row">
+    <div class="logo-icon">🐉</div>
+    <h1>MONSTER GUESSR</h1>
+    <div class="logo-icon">⚔️</div>
+  </div>
+  <div class="subtitle">Monster Hunter · Édition Quotidienne</div>
+  <div class="divider"></div>
+</header>
+<main>
+  <div class="timer-bar">
+    <span id="gcl">0/8</span>
+    <div class="attempts-row" id="dots"></div>
+    <button class="help-toggle" onclick="toggleHelp()">? COMMENT JOUER</button>
+  </div>
+  <div class="help-panel" id="helpPanel">
+    <strong>RÈGLES</strong>
+    Devinez le monstre Monster Hunter du jour en max <strong>8 essais</strong>.
+    <div class="legend-row"><div class="lb2 g"></div><span>Correct — même valeur que la cible</span></div>
+    <div class="legend-row"><div class="lb2 y"></div><span>Proche — valeur numériquement adjacente (gén / taille / danger)</span></div>
+    <div class="legend-row"><div class="lb2 r"></div><span>Incorrect — valeur différente</span></div>
+    <strong>COLONNES :</strong> Classe · Génération · Élément · Taille · Habitat · Dangerosité<br>
+    Les flèches ▲▼ indiquent si la cible est plus haute ou plus basse.
+  </div>
+  <div class="input-area">
+    <div class="autocomplete-wrap">
+      <input class="guess-input" id="gi" type="text" placeholder="Entrez un monstre..." autocomplete="off" oninput="onInput()" onkeydown="onKD(event)"/>
+      <div class="autocomplete-list" id="al"></div>
+    </div>
+    <button class="guess-btn" id="gb" onclick="submit()">DEVINER</button>
+  </div>
+  <div class="guesses-container">
+    <div class="guesses-header">
+      <div>MONSTRE</div><div>CLASSE</div><div>GÉN.</div><div>ÉLÉMENT</div><div>TAILLE</div><div>HABITAT</div><div>DANGER</div>
+    </div>
+    <div id="gr"></div>
+  </div>
+  <div class="result-banner" id="rb">
+    <div class="result-title" id="rt"></div>
+    <div class="result-monster" id="rm"></div>
+    <div class="result-desc" id="rd"></div>
+    <button class="share-btn" onclick="share()">📋 COPIER LE RÉSULTAT</button>
+    <div class="next-timer">Prochain monstre dans : <span id="nt">--:--:--</span></div>
+  </div>
+</main>
+<script>
+const M=[
+  {n:"Rathalos",c:"Flying Wyvern",g:1,e:"Fire",s:3,h:"Forest",d:4},
+  {n:"Rathian",c:"Flying Wyvern",g:1,e:"Poison",s:3,h:"Forest",d:3},
+  {n:"Diablos",c:"Flying Wyvern",g:1,e:"None",s:3,h:"Desert",d:4},
+  {n:"Fatalis",c:"Elder Dragon",g:1,e:"Dragon",s:3,h:"Ruins",d:5},
+  {n:"Kirin",c:"Elder Dragon",g:1,e:"Thunder",s:2,h:"Mountain",d:4},
+  {n:"Monoblos",c:"Flying Wyvern",g:1,e:"None",s:3,h:"Desert",d:3},
+  {n:"Gravios",c:"Flying Wyvern",g:1,e:"Fire",s:3,h:"Volcanic",d:3},
+  {n:"Gypceros",c:"Bird Wyvern",g:1,e:"None",s:2,h:"Forest",d:2},
+  {n:"Khezu",c:"Flying Wyvern",g:1,e:"Thunder",s:3,h:"Cave",d:3},
+  {n:"Yian Kut-Ku",c:"Bird Wyvern",g:1,e:"Fire",s:2,h:"Forest",d:2},
+  {n:"Plesioth",c:"Piscine Wyvern",g:1,e:"Water",s:3,h:"Desert",d:3},
+  {n:"Cephadrome",c:"Piscine Wyvern",g:1,e:"None",s:2,h:"Desert",d:2},
+  {n:"Lao-Shan Lung",c:"Elder Dragon",g:1,e:"Fire",s:4,h:"Mountain",d:5},
+  {n:"Crimson Fatalis",c:"Elder Dragon",g:1,e:"Fire",s:3,h:"Volcanic",d:5},
+  {n:"Yian Garuga",c:"Bird Wyvern",g:1,e:"Poison",s:3,h:"Forest",d:4},
+  {n:"Basarios",c:"Flying Wyvern",g:1,e:"Fire",s:2,h:"Volcanic",d:2},
+  {n:"Rajang",c:"Fanged Beast",g:2,e:"Thunder",s:3,h:"Mountain",d:5},
+  {n:"Chameleos",c:"Elder Dragon",g:2,e:"Poison",s:3,h:"Swamp",d:5},
+  {n:"Kushala Daora",c:"Elder Dragon",g:2,e:"None",s:3,h:"Mountain",d:5},
+  {n:"Teostra",c:"Elder Dragon",g:2,e:"Fire",s:3,h:"Desert",d:5},
+  {n:"Lunastra",c:"Elder Dragon",g:2,e:"Fire",s:3,h:"Desert",d:5},
+  {n:"Daimyo Hermitaur",c:"Carapaceon",g:2,e:"Water",s:2,h:"Swamp",d:3},
+  {n:"Shogun Ceanataur",c:"Carapaceon",g:2,e:"Water",s:2,h:"Swamp",d:3},
+  {n:"Congalala",c:"Fanged Beast",g:2,e:"None",s:2,h:"Forest",d:2},
+  {n:"Blangonga",c:"Fanged Beast",g:2,e:"None",s:2,h:"Tundra",d:3},
+  {n:"Tigrex",c:"Flying Wyvern",g:2,e:"None",s:3,h:"Mountain",d:4},
+  {n:"Akantor",c:"Flying Wyvern",g:2,e:"None",s:3,h:"Volcanic",d:5},
+  {n:"Ukanlos",c:"Flying Wyvern",g:2,e:"Ice",s:3,h:"Tundra",d:5},
+  {n:"Nargacuga",c:"Flying Wyvern",g:2,e:"None",s:3,h:"Forest",d:4},
+  {n:"Lavasioth",c:"Piscine Wyvern",g:2,e:"Fire",s:3,h:"Volcanic",d:3},
+  {n:"Hypnocatrice",c:"Bird Wyvern",g:2,e:"Sleep",s:2,h:"Desert",d:3},
+  {n:"Yama Tsukami",c:"Elder Dragon",g:2,e:"None",s:4,h:"Forest",d:5},
+  {n:"Lagiacrus",c:"Leviathan",g:3,e:"Thunder",s:3,h:"Ocean",d:4},
+  {n:"Royal Ludroth",c:"Leviathan",g:3,e:"Water",s:2,h:"Swamp",d:2},
+  {n:"Barioth",c:"Flying Wyvern",g:3,e:"Ice",s:3,h:"Tundra",d:4},
+  {n:"Barroth",c:"Brute Wyvern",g:3,e:"None",s:3,h:"Desert",d:2},
+  {n:"Deviljho",c:"Brute Wyvern",g:3,e:"Dragon",s:3,h:"Forest",d:5},
+  {n:"Uragaan",c:"Brute Wyvern",g:3,e:"Fire",s:3,h:"Volcanic",d:3},
+  {n:"Zinogre",c:"Fanged Wyvern",g:3,e:"Thunder",s:3,h:"Forest",d:4},
+  {n:"Agnaktor",c:"Leviathan",g:3,e:"Fire",s:3,h:"Volcanic",d:3},
+  {n:"Gobul",c:"Leviathan",g:3,e:"None",s:2,h:"Swamp",d:2},
+  {n:"Gigginox",c:"Flying Wyvern",g:3,e:"Poison",s:2,h:"Cave",d:2},
+  {n:"Alatreon",c:"Elder Dragon",g:3,e:"Dragon",s:3,h:"Volcanic",d:5},
+  {n:"Ceadeus",c:"Elder Dragon",g:3,e:"Water",s:4,h:"Ocean",d:5},
+  {n:"Jhen Mohran",c:"Elder Dragon",g:3,e:"Dragon",s:4,h:"Desert",d:5},
+  {n:"Brachydios",c:"Brute Wyvern",g:3,e:"Blast",s:3,h:"Volcanic",d:4},
+  {n:"Dire Miralis",c:"Elder Dragon",g:3,e:"Fire",s:4,h:"Ocean",d:5},
+  {n:"Duramboros",c:"Brute Wyvern",g:3,e:"None",s:3,h:"Swamp",d:3},
+  {n:"Amatsu",c:"Elder Dragon",g:3,e:"Water",s:4,h:"Mountain",d:5},
+  {n:"Nibelsnarf",c:"Leviathan",g:3,e:"None",s:2,h:"Desert",d:2},
+  {n:"Lagombi",c:"Fanged Beast",g:3,e:"Ice",s:2,h:"Tundra",d:2},
+  {n:"Volvidon",c:"Fanged Beast",g:3,e:"None",s:2,h:"Volcanic",d:2},
+  {n:"Mizutsune",c:"Leviathan",g:4,e:"Water",s:3,h:"Swamp",d:4},
+  {n:"Gore Magala",c:"???",g:4,e:"Dragon",s:3,h:"Ruins",d:5},
+  {n:"Shagaru Magala",c:"Elder Dragon",g:4,e:"Dragon",s:3,h:"Ruins",d:5},
+  {n:"Seregios",c:"Flying Wyvern",g:4,e:"None",s:3,h:"Desert",d:4},
+  {n:"Zamtrios",c:"Amphibian",g:4,e:"Ice",s:2,h:"Tundra",d:3},
+  {n:"Nerscylla",c:"Temnoceran",g:4,e:"Poison",s:2,h:"Cave",d:3},
+  {n:"Seltas Queen",c:"Neopteron",g:4,e:"None",s:2,h:"Desert",d:3},
+  {n:"Tetsucabra",c:"Amphibian",g:4,e:"None",s:2,h:"Swamp",d:2},
+  {n:"Najarala",c:"Snake Wyvern",g:4,e:"None",s:3,h:"Desert",d:3},
+  {n:"Kecha Wacha",c:"Fanged Beast",g:4,e:"Water",s:2,h:"Forest",d:3},
+  {n:"Dalamadur",c:"Elder Dragon",g:4,e:"Poison",s:4,h:"Mountain",d:5},
+  {n:"Gogmazios",c:"Elder Dragon",g:4,e:"Dragon",s:3,h:"Ruins",d:5},
+  {n:"Glavenus",c:"Brute Wyvern",g:4,e:"Fire",s:3,h:"Forest",d:4},
+  {n:"Gammoth",c:"Fanged Beast",g:4,e:"Ice",s:3,h:"Tundra",d:4},
+  {n:"Astalos",c:"Flying Wyvern",g:4,e:"Thunder",s:3,h:"Forest",d:4},
+  {n:"Nakarkos",c:"Elder Dragon",g:4,e:"None",s:4,h:"Cave",d:5},
+  {n:"Valstrax",c:"Elder Dragon",g:4,e:"Dragon",s:3,h:"Mountain",d:5},
+  {n:"Malfestio",c:"Bird Wyvern",g:4,e:"None",s:2,h:"Forest",d:3},
+  {n:"Nergigante",c:"Elder Dragon",g:5,e:"Dragon",s:3,h:"Mountain",d:5},
+  {n:"Vaal Hazak",c:"Elder Dragon",g:5,e:"Dragon",s:3,h:"Ruins",d:5},
+  {n:"Kulve Taroth",c:"Elder Dragon",g:5,e:"Fire",s:4,h:"Volcanic",d:5},
+  {n:"Xeno'jiiva",c:"Elder Dragon",g:5,e:"Dragon",s:4,h:"Cave",d:5},
+  {n:"Anjanath",c:"Brute Wyvern",g:5,e:"Fire",s:3,h:"Forest",d:3},
+  {n:"Odogaron",c:"Fanged Wyvern",g:5,e:"None",s:2,h:"Ruins",d:4},
+  {n:"Legiana",c:"Flying Wyvern",g:5,e:"Ice",s:3,h:"Mountain",d:3},
+  {n:"Tobi-Kadachi",c:"Fanged Wyvern",g:5,e:"Thunder",s:2,h:"Forest",d:2},
+  {n:"Pukei-Pukei",c:"Bird Wyvern",g:5,e:"Poison",s:2,h:"Forest",d:2},
+  {n:"Bazelgeuse",c:"Flying Wyvern",g:5,e:"Blast",s:3,h:"Forest",d:4},
+  {n:"Paolumu",c:"Flying Wyvern",g:5,e:"None",s:2,h:"Mountain",d:2},
+  {n:"Radobaan",c:"Brute Wyvern",g:5,e:"None",s:3,h:"Ruins",d:2},
+  {n:"Jyuratodus",c:"Piscine Wyvern",g:5,e:"Water",s:2,h:"Swamp",d:2},
+  {n:"Tzitzi-Ya-Ku",c:"Bird Wyvern",g:5,e:"None",s:2,h:"Swamp",d:2},
+  {n:"Kulu-Ya-Ku",c:"Bird Wyvern",g:5,e:"None",s:2,h:"Desert",d:1},
+  {n:"Dodogama",c:"Fanged Wyvern",g:5,e:"Fire",s:2,h:"Volcanic",d:2},
+  {n:"Velkhana",c:"Elder Dragon",g:5,e:"Ice",s:3,h:"Tundra",d:5},
+  {n:"Namielle",c:"Elder Dragon",g:5,e:"Water",s:3,h:"Ocean",d:5},
+  {n:"Safi'jiiva",c:"Elder Dragon",g:5,e:"Dragon",s:4,h:"Cave",d:5},
+  {n:"Shara Ishvalda",c:"Elder Dragon",g:5,e:"None",s:3,h:"Ruins",d:5},
+  {n:"Acidic Glavenus",c:"Brute Wyvern",g:5,e:"Dragon",s:3,h:"Forest",d:4},
+  {n:"Banbaro",c:"Brute Wyvern",g:5,e:"Ice",s:3,h:"Tundra",d:3},
+  {n:"Beotodus",c:"Piscine Wyvern",g:5,e:"Ice",s:2,h:"Tundra",d:2},
+  {n:"Fulgur Anjanath",c:"Brute Wyvern",g:5,e:"Thunder",s:3,h:"Forest",d:4},
+  {n:"Magnamalo",c:"Fanged Wyvern",g:6,e:"Poison",s:3,h:"Mountain",d:5},
+  {n:"Almudron",c:"Leviathan",g:6,e:"Water",s:3,h:"Swamp",d:3},
+  {n:"Bishaten",c:"Fanged Beast",g:6,e:"None",s:2,h:"Forest",d:3},
+  {n:"Aknosom",c:"Bird Wyvern",g:6,e:"Fire",s:3,h:"Desert",d:3},
+  {n:"Somnacanth",c:"Leviathan",g:6,e:"Sleep",s:3,h:"Ocean",d:4},
+  {n:"Tetranadon",c:"Amphibian",g:6,e:"Water",s:2,h:"Swamp",d:2},
+  {n:"Rakna-Kadaki",c:"Temnoceran",g:6,e:"Fire",s:3,h:"Volcanic",d:4},
+  {n:"Goss Harag",c:"Fanged Beast",g:6,e:"Ice",s:3,h:"Tundra",d:4},
+  {n:"Ibushi",c:"Elder Dragon",g:6,e:"None",s:3,h:"Mountain",d:5},
+  {n:"Narwa",c:"Elder Dragon",g:6,e:"Thunder",s:3,h:"Mountain",d:5},
+  {n:"Malzeno",c:"Elder Dragon",g:6,e:"Dragon",s:3,h:"Ruins",d:5},
+  {n:"Lunagaron",c:"Fanged Wyvern",g:6,e:"Ice",s:3,h:"Tundra",d:4},
+  {n:"Garangolm",c:"Fanged Beast",g:6,e:"Blast",s:3,h:"Forest",d:4},
+  {n:"Espinas",c:"Flying Wyvern",g:6,e:"Poison",s:3,h:"Forest",d:4},
+  {n:"Gaismagorm",c:"Elder Dragon",g:6,e:"None",s:4,h:"Cave",d:5},
+  {n:"Arkveld",c:"Flying Wyvern",g:6,e:"Dragon",s:3,h:"Ruins",d:5},
+  {n:"Doshaguma",c:"Fanged Beast",g:6,e:"None",s:3,h:"Forest",d:4},
+  {n:"Rey Dau",c:"Flying Wyvern",g:6,e:"Thunder",s:3,h:"Desert",d:4},
+  {n:"Jin Dahaad",c:"Brute Wyvern",g:6,e:"Ice",s:3,h:"Mountain",d:4},
+  {n:"Uth Duna",c:"Leviathan",g:6,e:"Water",s:3,h:"Ocean",d:4},
+  {n:"Rompopolo",c:"Brute Wyvern",g:6,e:"Poison",s:3,h:"Swamp",d:4},
+  {n:"Quematrice",c:"Brute Wyvern",g:6,e:"Fire",s:3,h:"Volcanic",d:4},
+  {n:"Nu Udra",c:"Cephalopod",g:6,e:"Fire",s:4,h:"Ocean",d:5},
+  {n:"Xu Wu",c:"Cephalopod",g:6,e:"None",s:3,h:"Forest",d:4},
+  {n:"Zoh Shia",c:"Elder Dragon",g:6,e:"None",s:4,h:"Ruins",d:5},
+  {n:"Chatacabra",c:"Amphibian",g:6,e:"None",s:2,h:"Desert",d:2},
+  {n:"Balahara",c:"Leviathan",g:6,e:"Water",s:2,h:"Desert",d:2},
+  {n:"Hirabami",c:"Leviathan",g:6,e:"Thunder",s:2,h:"Mountain",d:3},
+  {n:"Lala Barina",c:"Temnoceran",g:6,e:"Poison",s:2,h:"Forest",d:3},
+  {n:"Ajarakan",c:"Fanged Beast",g:6,e:"Fire",s:3,h:"Volcanic",d:4},
+];
+const SL=["","Small","Medium","Large","Giant"];
+const MAX=8;
+function dayIdx(){const s=new Date('2025-01-01');const t=new Date();t.setHours(0,0,0,0);return Math.floor((t-s)/86400000)%M.length;}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+let tgt=M[dayIdx()],guesses=[],over=false,sel=-1;
+function loadState(){
+  try{const s=JSON.parse(localStorage.getItem('mhg25'));
+  if(!s||s.date!==todayStr())return;
+  guesses=s.guesses||[];over=s.over||false;
+  guesses.forEach(renderRow);updateDots();
+  if(over)showResult(s.won);}catch(e){}
+}
+function saveState(won){try{localStorage.setItem('mhg25',JSON.stringify({date:todayStr(),guesses,over,won}));}catch(e){}}
+function cmp(m){
+  const gd=Math.abs(m.g-tgt.g),sd=Math.abs(m.s-tgt.s),dd=Math.abs(m.d-tgt.d);
+  return[
+    {v:m.c, st:m.c===tgt.c?'correct':'wrong',a:''},
+    {v:'G'+m.g, st:m.g===tgt.g?'correct':gd===1?'close':'wrong',a:m.g<tgt.g?'▲':m.g>tgt.g?'▼':''},
+    {v:m.e, st:m.e===tgt.e?'correct':'wrong',a:''},
+    {v:SL[m.s], st:m.s===tgt.s?'correct':sd===1?'close':'wrong',a:m.s<tgt.s?'▲':m.s>tgt.s?'▼':''},
+    {v:m.h, st:m.h===tgt.h?'correct':'wrong',a:''},
+    {v:'★'.repeat(m.d)+'☆'.repeat(5-m.d), st:m.d===tgt.d?'correct':dd===1?'close':'wrong',a:m.d<tgt.d?'▲':m.d>tgt.d?'▼':''},
+  ];
+}
+function renderRow(data){
+  const {m,f}=data;
+  const row=document.createElement('div');row.className='guess-row';
+  const nc=document.createElement('div');nc.className='guess-cell '+(m.n===tgt.n?'correct':'wrong');nc.textContent=m.n;row.appendChild(nc);
+  f.forEach(x=>{const c=document.createElement('div');c.className='guess-cell '+x.st;c.innerHTML=x.v+(x.a?'<span class="arrow"> '+x.a+'</span>':'');row.appendChild(c);});
+  document.getElementById('gr').prepend(row);
+}
+function updateDots(){
+  const r=document.getElementById('dots');r.innerHTML='';
+  for(let i=0;i<MAX;i++){const d=document.createElement('div');d.className='attempt-dot';
+  if(i<guesses.length){const w=guesses[i].m.n===tgt.n;d.classList.add(w?'win':(over&&i===guesses.length-1?'lose':'used'));}r.appendChild(d);}
+  document.getElementById('gcl').innerHTML='<span>'+guesses.length+'/'+MAX+'</span>';
+}
+function showResult(won){
+  const b=document.getElementById('rb');b.classList.add('show',won?'win':'lose');
+  document.getElementById('rt').textContent=won?'⚔ PROIE ABATTUE ⚔':'💀 CHASSE ÉCHOUÉE';
+  document.getElementById('rm').textContent='Le monstre était : '+tgt.n;
+  document.getElementById('rd').textContent=won?'Bravo ! '+tgt.n+' identifié en '+guesses.length+' essai'+(guesses.length>1?'s':'')+'.'
+    :tgt.n+' | '+tgt.c+' | Gén.'+tgt.g+' | '+tgt.e+' | Danger: '+'★'.repeat(tgt.d);
+  document.getElementById('gb').disabled=true;document.getElementById('gi').disabled=true;
+  tick();setInterval(tick,1000);
+}
+function tick(){
+  const now=new Date(),tom=new Date(now);tom.setDate(tom.getDate()+1);tom.setHours(0,0,0,0);
+  const diff=tom-now;
+  document.getElementById('nt').textContent=String(Math.floor(diff/3600000)).padStart(2,'0')+':'+String(Math.floor((diff%3600000)/60000)).padStart(2,'0')+':'+String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+function submit(){
+  if(over)return;
+  const inp=document.getElementById('gi');const v=inp.value.trim();if(!v)return;
+  const m=M.find(x=>x.n.toLowerCase()===v.toLowerCase());
+  if(!m){inp.style.borderColor='#c0392b';inp.placeholder='Monstre introuvable...';setTimeout(()=>{inp.style.borderColor='';inp.placeholder='Entrez un monstre...';},1500);return;}
+  if(guesses.find(x=>x.m.n===m.n)){inp.style.borderColor='#d4a017';inp.placeholder='Déjà essayé !';setTimeout(()=>{inp.style.borderColor='';inp.placeholder='Entrez un monstre...';},1500);return;}
+  const f=cmp(m);const data={m,f};guesses.push(data);renderRow(data);updateDots();
+  inp.value='';document.getElementById('al').innerHTML='';
+  const won=m.n===tgt.n;
+  if(won||guesses.length>=MAX){over=true;saveState(won);setTimeout(()=>showResult(won),400);}else saveState(false);
+}
+function onInput(){
+  const v=document.getElementById('gi').value.toLowerCase().trim();
+  const l=document.getElementById('al');l.innerHTML='';sel=-1;if(!v)return;
+  const done=new Set(guesses.map(x=>x.m.n));
+  M.filter(m=>m.n.toLowerCase().includes(v)&&!done.has(m.n)).slice(0,8).forEach(m=>{
+    const i=document.createElement('div');i.className='autocomplete-item';
+    i.innerHTML=m.n+'<span class="gb">G'+m.g+' · '+m.c+'</span>';
+    i.onclick=()=>{document.getElementById('gi').value=m.n;l.innerHTML='';submit();};l.appendChild(i);});
+}
+function onKD(e){
+  const l=document.getElementById('al');const items=l.querySelectorAll('.autocomplete-item');
+  if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,items.length-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(items[sel])document.getElementById('gi').value=items[sel].firstChild.textContent.trim();}
+  else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(sel>=0&&items[sel])document.getElementById('gi').value=items[sel].firstChild.textContent.trim();}
+  else if(e.key==='Enter'){e.preventDefault();l.innerHTML='';submit();}
+  else if(e.key==='Escape')l.innerHTML='';
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.autocomplete-wrap'))document.getElementById('al').innerHTML='';});
+function toggleHelp(){document.getElementById('helpPanel').classList.toggle('open');}
+function share(){
+  let t='Monster Guessr '+todayStr()+'\n'+guesses.length+'/'+MAX+' essais\n\n';
+  guesses.forEach(x=>{const w=x.m.n===tgt.n;t+=x.f.map(f=>f.st==='correct'?'🟩':f.st==='close'?'🟨':'🟥').join('')+(w?' ⚔':'')+'\n';});
+  t+='\nhttps://VOTRE-USERNAME.github.io/monster-guessr';
+  try{navigator.clipboard.writeText(t);}catch(e){}
+  const b=document.querySelector('.share-btn');b.textContent='✓ COPIÉ !';setTimeout(()=>b.textContent='📋 COPIER LE RÉSULTAT',2000);
+}
+updateDots();loadState();
+if(!over)document.getElementById('gi').focus();
+</script>
+</body>
+</html>
