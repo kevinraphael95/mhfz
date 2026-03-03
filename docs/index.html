@@ -255,9 +255,18 @@ const M=[
 ];
 const SL=["","Small","Medium","Large","Giant"];
 const MAX=8;
-function dayIdx(){const s=new Date('2025-01-01');const t=new Date();t.setHours(0,0,0,0);return Math.floor((t-s)/86400000)%M.length;}
+function seededShuffle(arr,seed){
+  const a=arr.slice();let s=seed>>>0;
+  for(let i=a.length-1;i>0;i--){
+    s=(Math.imul(s,1664525)+1013904223)>>>0;
+    const j=s%(i+1);[a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function getDayNumber(){const start=new Date('2025-01-01T00:00:00');const today=new Date();today.setHours(0,0,0,0);return Math.floor((today-start)/86400000);}
+function getTodayMonster(){const day=getDayNumber();return seededShuffle(M,day^0xC0FFEE)[day%M.length];}
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
-let tgt=M[dayIdx()],guesses=[],over=false,sel=-1;
+let tgt=getTodayMonster(),guesses=[],over=false,sel=-1;
 function loadState(){
   try{const s=JSON.parse(localStorage.getItem('mhg25'));
   if(!s||s.date!==todayStr())return;
