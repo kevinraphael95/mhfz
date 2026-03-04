@@ -9,55 +9,85 @@
 :root{--bg:#0a0805;--surface:#13100c;--surface2:#1e1912;--border:#3a2e1e;--accent:#c8832a;--accent2:#e8a84a;--text:#e8dcc8;--text-dim:#8a7a60;--correct:#1a3a25;--wrong:#3a1515;--close:#3a2e00;--cb:#27a35a;--wb:#c0392b;--lb:#d4a017}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
-header{width:100%;max-width:960px;padding:32px 20px 16px;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:1}
+header{width:100%;max-width:960px;padding:28px 20px 12px;display:flex;flex-direction:column;align-items:center;gap:4px}
 .logo-row{display:flex;align-items:center;gap:14px}
-.logo-icon{font-size:36px;animation:pg 3s ease-in-out infinite}
+.logo-icon{font-size:32px;animation:pg 3s ease-in-out infinite}
 @keyframes pg{0%,100%{filter:drop-shadow(0 0 10px #c8832a66)}50%{filter:drop-shadow(0 0 22px #c8832aaa)}}
-h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(22px,5vw,38px);letter-spacing:.08em;background:linear-gradient(135deg,#c8832a,#e8a84a,#c8832a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.subtitle{font-family:'Crimson Pro',serif;font-style:italic;color:var(--text-dim);font-size:14px;letter-spacing:.15em}
-.divider{width:100%;max-width:700px;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--accent),var(--border),transparent);margin:12px 0;position:relative}
+h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(20px,5vw,38px);letter-spacing:.08em;background:linear-gradient(135deg,#c8832a,#e8a84a,#c8832a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{font-family:'Crimson Pro',serif;font-style:italic;color:var(--text-dim);font-size:13px;letter-spacing:.15em}
+.divider{width:100%;max-width:700px;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--accent),var(--border),transparent);margin:10px 0;position:relative}
 .divider::after{content:'⚔';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--bg);padding:0 10px;color:var(--accent);font-size:14px}
-main{width:100%;max-width:960px;padding:0 16px 40px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:16px}
-.timer-bar{display:flex;gap:24px;align-items:center;font-family:'Cinzel',serif;font-size:13px;color:var(--text-dim);letter-spacing:.1em}
+main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.timer-bar{display:flex;gap:16px;align-items:center;font-family:'Cinzel',serif;font-size:12px;color:var(--text-dim);letter-spacing:.1em;flex-wrap:wrap;justify-content:center}
 .timer-bar span{color:var(--accent2)}
-.input-area{width:100%;max-width:620px;display:flex;gap:10px}
+.input-area{width:100%;max-width:620px;display:flex;gap:8px}
 .autocomplete-wrap{position:relative;flex:1}
-.guess-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Cinzel',serif;font-size:14px;padding:12px 18px;outline:none;border-radius:2px;letter-spacing:.05em;transition:border-color .2s}
+.guess-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Cinzel',serif;font-size:14px;padding:12px 16px;outline:none;border-radius:2px;letter-spacing:.05em;transition:border-color .2s}
 .guess-input:focus{border-color:var(--accent)}
 .guess-input::placeholder{color:var(--text-dim)}
-.guess-btn{background:linear-gradient(135deg,#a86820,#c8832a);border:none;color:#fff;font-family:'Cinzel',serif;font-size:13px;font-weight:700;padding:12px 24px;cursor:pointer;letter-spacing:.12em;border-radius:2px;transition:all .2s;text-transform:uppercase}
-.guess-btn:hover{background:linear-gradient(135deg,#c8832a,#e8a84a);transform:translateY(-1px)}
-.guess-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.guess-btn{background:linear-gradient(135deg,#a86820,#c8832a);border:none;color:#fff;font-family:'Cinzel',serif;font-size:12px;font-weight:700;padding:12px 18px;cursor:pointer;letter-spacing:.1em;border-radius:2px;transition:all .2s;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+.guess-btn:hover{background:linear-gradient(135deg,#c8832a,#e8a84a)}
+.guess-btn:disabled{opacity:.4;cursor:not-allowed}
 .autocomplete-list{position:absolute;top:100%;left:0;right:0;background:var(--surface2);border:1px solid var(--border);border-top:none;max-height:220px;overflow-y:auto;z-index:100;border-radius:0 0 2px 2px}
 .autocomplete-list:empty{display:none}
-.autocomplete-item{padding:10px 18px;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;color:var(--text);letter-spacing:.04em;transition:background .15s;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.autocomplete-item{padding:10px 16px;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;color:var(--text);letter-spacing:.04em;transition:background .15s;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .autocomplete-item:hover,.autocomplete-item.selected{background:var(--surface);color:var(--accent2)}
-.autocomplete-item .gb{font-size:10px;color:var(--text-dim);margin-left:auto;white-space:nowrap}
+.autocomplete-item .gb-tag{font-size:10px;color:var(--text-dim);margin-left:auto;white-space:nowrap}
+
+/* ═══════════════════════════════════════════
+   DESKTOP TABLE LAYOUT
+═══════════════════════════════════════════ */
 .guesses-container{width:100%;overflow-x:auto}
-.guesses-header{display:grid;grid-template-columns:180px repeat(6,1fr);gap:4px;margin-bottom:6px;padding:0 2px}
+.guesses-header{display:grid;grid-template-columns:170px repeat(6,1fr);gap:4px;margin-bottom:6px;padding:0 2px}
 .guesses-header div{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;color:var(--text-dim);text-align:center;text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border)}
 .guesses-header div:first-child{text-align:left;padding-left:8px}
-.guess-row{display:grid;grid-template-columns:180px repeat(6,1fr);gap:4px;margin-bottom:4px;animation:si .35s cubic-bezier(.2,.8,.3,1) both}
+.guess-row{display:grid;grid-template-columns:170px repeat(6,1fr);gap:4px;margin-bottom:4px;animation:si .35s cubic-bezier(.2,.8,.3,1) both}
 @keyframes si{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.guess-cell{background:var(--surface2);border:1px solid var(--border);padding:10px 8px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.04em;border-radius:2px;min-height:48px;display:flex;align-items:center;justify-content:center}
+.guess-cell{background:var(--surface2);border:1px solid var(--border);padding:10px 6px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.04em;border-radius:2px;min-height:46px;display:flex;align-items:center;justify-content:center;line-height:1.3}
 .guess-cell:first-child{text-align:left;justify-content:flex-start;padding-left:10px;font-size:12px}
 .guess-cell.correct{background:var(--correct);border-color:var(--cb);color:#6ee89a}
 .guess-cell.wrong{background:var(--wrong);border-color:var(--wb);color:#e87070}
 .guess-cell.close{background:var(--close);border-color:var(--lb);color:#e8c870}
-.arrow{font-size:9px;opacity:.9;margin-left:3px}
-.result-banner{width:100%;max-width:620px;padding:20px 28px;border:1px solid var(--accent);background:var(--surface2);border-radius:2px;text-align:center;display:none;flex-direction:column;gap:10px;animation:fu .5s ease both}
+.arrow{font-size:9px;opacity:.9;margin-left:2px}
+
+/* ═══════════════════════════════════════════
+   MOBILE CARD LAYOUT
+═══════════════════════════════════════════ */
+.guess-cards{display:none;flex-direction:column;gap:8px;width:100%}
+.guess-card{background:var(--surface2);border:1px solid var(--border);border-radius:4px;overflow:hidden;animation:si .35s cubic-bezier(.2,.8,.3,1) both}
+.guess-card-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface)}
+.card-monster-name{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.06em}
+.card-monster-name.correct{color:#6ee89a}
+.card-monster-name.wrong{color:#e87070}
+.card-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)}
+.card-cell{background:var(--surface2);padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.card-cell.correct{background:var(--correct)}
+.card-cell.wrong{background:var(--wrong)}
+.card-cell.close{background:var(--close)}
+.card-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase;text-align:center}
+.card-value{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.04em;text-align:center;line-height:1.3}
+.card-cell.correct .card-label{color:#4fdf8a88}
+.card-cell.correct .card-value{color:#6ee89a}
+.card-cell.wrong .card-label{color:#e8707088}
+.card-cell.wrong .card-value{color:#e87070}
+.card-cell.close .card-label{color:#e8c87088}
+.card-cell.close .card-value{color:#e8c870}
+.card-arrow{font-size:8px;opacity:.8}
+
+/* Result banner */
+.result-banner{width:100%;max-width:620px;padding:18px 20px;border:1px solid var(--accent);background:var(--surface2);border-radius:2px;text-align:center;display:none;flex-direction:column;gap:10px;animation:fu .5s ease both}
 @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .result-banner.show{display:flex}
 .result-banner.win{border-color:var(--cb);background:#0d2018}
 .result-banner.lose{border-color:var(--wb);background:#1a0a0a}
-.result-title{font-family:'Cinzel',serif;font-size:22px;font-weight:900;letter-spacing:.1em}
+.result-title{font-family:'Cinzel',serif;font-size:20px;font-weight:900;letter-spacing:.1em}
 .result-banner.win .result-title{color:#6ee89a}
 .result-banner.lose .result-title{color:#e87070}
-.result-monster{font-family:'Cinzel',serif;font-size:16px;color:var(--accent2)}
-.result-desc{font-style:italic;color:var(--text-dim);font-size:14px;line-height:1.6}
+.result-monster{font-family:'Cinzel',serif;font-size:15px;color:var(--accent2)}
+.result-desc{font-style:italic;color:var(--text-dim);font-size:13px;line-height:1.6}
 .next-timer{font-size:13px;color:var(--text-dim);letter-spacing:.08em;font-family:'Cinzel',serif}
-.next-timer span{color:var(--accent2);font-size:16px}
-.attempts-row{display:flex;gap:6px;align-items:center}
+.next-timer span{color:var(--accent2);font-size:15px}
+.attempts-row{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:center}
 .attempt-dot{width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);transition:all .3s}
 .attempt-dot.used{background:var(--accent);border-color:var(--accent2)}
 .attempt-dot.win{background:#27a35a;border-color:#4fdf8a}
@@ -66,7 +96,7 @@ main{width:100%;max-width:960px;padding:0 16px 40px;position:relative;z-index:1;
 .share-btn:hover{background:var(--accent);color:#fff}
 .help-toggle{font-family:'Cinzel',serif;font-size:11px;color:var(--text-dim);letter-spacing:.1em;cursor:pointer;text-decoration:underline;text-underline-offset:3px;background:none;border:none;transition:color .2s}
 .help-toggle:hover{color:var(--accent2)}
-.help-panel{max-width:620px;width:100%;background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:2px;display:none;flex-direction:column;gap:8px;font-size:13px;line-height:1.7;color:var(--text-dim)}
+.help-panel{max-width:620px;width:100%;background:var(--surface2);border:1px solid var(--border);padding:14px 16px;border-radius:2px;display:none;flex-direction:column;gap:8px;font-size:13px;line-height:1.7;color:var(--text-dim)}
 .help-panel.open{display:flex}
 .help-panel strong{color:var(--accent2);font-family:'Cinzel',serif;font-size:12px}
 .legend-row{display:flex;gap:10px;align-items:center}
@@ -77,7 +107,30 @@ main{width:100%;max-width:960px;padding:0 16px 40px;position:relative;z-index:1;
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-@media(max-width:640px){.guesses-header,.guess-row{grid-template-columns:130px repeat(6,1fr)}.guess-cell{font-size:9px;padding:6px 3px;min-height:40px}.guess-cell:first-child{font-size:10px}h1{font-size:22px}}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+═══════════════════════════════════════════ */
+@media(max-width:600px){
+  /* Hide desktop table, show cards */
+  .guesses-container{display:none}
+  .guess-cards{display:flex}
+  
+  h1{font-size:20px}
+  .logo-icon{font-size:26px}
+  header{padding:18px 16px 10px}
+  main{gap:12px;padding:0 10px 32px}
+  .guess-input{font-size:13px;padding:11px 14px}
+  .guess-btn{font-size:11px;padding:11px 14px;letter-spacing:.06em}
+}
+
+/* Mid-size: tighter table */
+@media(min-width:601px) and (max-width:800px){
+  .guesses-header{grid-template-columns:130px repeat(6,1fr)}
+  .guess-row{grid-template-columns:130px repeat(6,1fr)}
+  .guess-cell{font-size:9px;padding:8px 3px;min-height:42px}
+  .guess-cell:first-child{font-size:10px}
+}
 </style>
 </head>
 <body>
@@ -112,12 +165,18 @@ main{width:100%;max-width:960px;padding:0 16px 40px;position:relative;z-index:1;
     </div>
     <button class="guess-btn" id="gb" onclick="submit()">DEVINER</button>
   </div>
+
+  <!-- DESKTOP: table layout -->
   <div class="guesses-container">
     <div class="guesses-header">
       <div>MONSTRE</div><div>CLASSE</div><div>GÉN.</div><div>ÉLÉMENT</div><div>TAILLE</div><div>HABITAT</div><div>DANGER</div>
     </div>
     <div id="gr"></div>
   </div>
+
+  <!-- MOBILE: card layout -->
+  <div class="guess-cards" id="gc"></div>
+
   <div class="result-banner" id="rb">
     <div class="result-title" id="rt"></div>
     <div class="result-monster" id="rm"></div>
@@ -254,38 +313,34 @@ const M=[
   {n:"Ajarakan",c:"Fanged Beast",g:6,e:"Fire",s:3,h:"Volcanic",d:4},
 ];
 const SL=["","Small","Medium","Large","Giant"];
+const COLS=[
+  {key:'c',label:'CLASSE'},
+  {key:'g',label:'GÉN.'},
+  {key:'e',label:'ÉLÉMENT'},
+  {key:'s',label:'TAILLE'},
+  {key:'h',label:'HABITAT'},
+  {key:'d',label:'DANGER'},
+];
 const MAX=8;
-function seededShuffle(arr,seed){
-  const a=arr.slice();let s=seed>>>0;
-  for(let i=a.length-1;i>0;i--){
-    s=(Math.imul(s,1664525)+1013904223)>>>0;
-    const j=s%(i+1);[a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
+function seededShuffle(arr,seed){const a=arr.slice();let s=seed>>>0;for(let i=a.length-1;i>0;i--){s=(Math.imul(s,1664525)+1013904223)>>>0;const j=s%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 function getDayNumber(){const start=new Date('2025-01-01T00:00:00');const today=new Date();today.setHours(0,0,0,0);return Math.floor((today-start)/86400000);}
 function getTodayMonster(){const day=getDayNumber();return seededShuffle(M,day^0xC0FFEE)[day%M.length];}
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 let tgt=getTodayMonster(),guesses=[],over=false,sel=-1;
-function loadState(){
-  try{const s=JSON.parse(localStorage.getItem('mhg25'));
-  if(!s||s.date!==todayStr())return;
-  guesses=s.guesses||[];over=s.over||false;
-  guesses.forEach(renderRow);updateDots();
-  if(over)showResult(s.won);}catch(e){}
-}
-function saveState(won){try{localStorage.setItem('mhg25',JSON.stringify({date:todayStr(),guesses,over,won}));}catch(e){}}
+
 function cmp(m){
   const gd=Math.abs(m.g-tgt.g),sd=Math.abs(m.s-tgt.s),dd=Math.abs(m.d-tgt.d);
   return[
-    {v:m.c, st:m.c===tgt.c?'correct':'wrong',a:''},
-    {v:'G'+m.g, st:m.g===tgt.g?'correct':gd===1?'close':'wrong',a:m.g<tgt.g?'▲':m.g>tgt.g?'▼':''},
-    {v:m.e, st:m.e===tgt.e?'correct':'wrong',a:''},
-    {v:SL[m.s], st:m.s===tgt.s?'correct':sd===1?'close':'wrong',a:m.s<tgt.s?'▲':m.s>tgt.s?'▼':''},
-    {v:m.h, st:m.h===tgt.h?'correct':'wrong',a:''},
-    {v:'★'.repeat(m.d)+'☆'.repeat(5-m.d), st:m.d===tgt.d?'correct':dd===1?'close':'wrong',a:m.d<tgt.d?'▲':m.d>tgt.d?'▼':''},
+    {v:m.c,st:m.c===tgt.c?'correct':'wrong',a:''},
+    {v:'G'+m.g,st:m.g===tgt.g?'correct':gd===1?'close':'wrong',a:m.g<tgt.g?'▲':m.g>tgt.g?'▼':''},
+    {v:m.e,st:m.e===tgt.e?'correct':'wrong',a:''},
+    {v:SL[m.s],st:m.s===tgt.s?'correct':sd===1?'close':'wrong',a:m.s<tgt.s?'▲':m.s>tgt.s?'▼':''},
+    {v:m.h,st:m.h===tgt.h?'correct':'wrong',a:''},
+    {v:'★'.repeat(m.d)+'☆'.repeat(5-m.d),st:m.d===tgt.d?'correct':dd===1?'close':'wrong',a:m.d<tgt.d?'▲':m.d>tgt.d?'▼':''},
   ];
 }
+
+/* Desktop row */
 function renderRow(data){
   const {m,f}=data;
   const row=document.createElement('div');row.className='guess-row';
@@ -293,12 +348,40 @@ function renderRow(data){
   f.forEach(x=>{const c=document.createElement('div');c.className='guess-cell '+x.st;c.innerHTML=x.v+(x.a?'<span class="arrow"> '+x.a+'</span>':'');row.appendChild(c);});
   document.getElementById('gr').prepend(row);
 }
+
+/* Mobile card */
+function renderCard(data){
+  const {m,f}=data;
+  const isWin=m.n===tgt.n;
+  const card=document.createElement('div');card.className='guess-card';
+  
+  // Header with monster name
+  const hdr=document.createElement('div');hdr.className='guess-card-header';
+  const nm=document.createElement('div');nm.className='card-monster-name '+(isWin?'correct':'wrong');nm.textContent=m.n;
+  const badge=document.createElement('div');badge.style.cssText='font-family:Cinzel,serif;font-size:10px;color:var(--text-dim);letter-spacing:.05em';badge.textContent='G'+m.g+' · '+m.c;
+  hdr.appendChild(nm);hdr.appendChild(badge);card.appendChild(hdr);
+  
+  // 3-column grid of attributes (skip gen since shown in header)
+  const grid=document.createElement('div');grid.className='card-grid';
+  COLS.forEach((col,i)=>{
+    const x=f[i];
+    const cell=document.createElement('div');cell.className='card-cell '+x.st;
+    const lbl=document.createElement('div');lbl.className='card-label';lbl.textContent=col.label;
+    const val=document.createElement('div');val.className='card-value';
+    val.innerHTML=x.v+(x.a?'<span class="card-arrow"> '+x.a+'</span>':'');
+    cell.appendChild(lbl);cell.appendChild(val);grid.appendChild(cell);
+  });
+  card.appendChild(grid);
+  document.getElementById('gc').prepend(card);
+}
+
 function updateDots(){
   const r=document.getElementById('dots');r.innerHTML='';
   for(let i=0;i<MAX;i++){const d=document.createElement('div');d.className='attempt-dot';
   if(i<guesses.length){const w=guesses[i].m.n===tgt.n;d.classList.add(w?'win':(over&&i===guesses.length-1?'lose':'used'));}r.appendChild(d);}
   document.getElementById('gcl').innerHTML='<span>'+guesses.length+'/'+MAX+'</span>';
 }
+
 function showResult(won){
   const b=document.getElementById('rb');b.classList.add('show',won?'win':'lose');
   document.getElementById('rt').textContent=won?'⚔ PROIE ABATTUE ⚔':'💀 CHASSE ÉCHOUÉE';
@@ -308,31 +391,36 @@ function showResult(won){
   document.getElementById('gb').disabled=true;document.getElementById('gi').disabled=true;
   tick();setInterval(tick,1000);
 }
+
 function tick(){
   const now=new Date(),tom=new Date(now);tom.setDate(tom.getDate()+1);tom.setHours(0,0,0,0);
   const diff=tom-now;
   document.getElementById('nt').textContent=String(Math.floor(diff/3600000)).padStart(2,'0')+':'+String(Math.floor((diff%3600000)/60000)).padStart(2,'0')+':'+String(Math.floor((diff%60000)/1000)).padStart(2,'0');
 }
+
 function submit(){
   if(over)return;
   const inp=document.getElementById('gi');const v=inp.value.trim();if(!v)return;
   const m=M.find(x=>x.n.toLowerCase()===v.toLowerCase());
   if(!m){inp.style.borderColor='#c0392b';inp.placeholder='Monstre introuvable...';setTimeout(()=>{inp.style.borderColor='';inp.placeholder='Entrez un monstre...';},1500);return;}
   if(guesses.find(x=>x.m.n===m.n)){inp.style.borderColor='#d4a017';inp.placeholder='Déjà essayé !';setTimeout(()=>{inp.style.borderColor='';inp.placeholder='Entrez un monstre...';},1500);return;}
-  const f=cmp(m);const data={m,f};guesses.push(data);renderRow(data);updateDots();
+  const f=cmp(m);const data={m,f};guesses.push(data);
+  renderRow(data);renderCard(data);updateDots();
   inp.value='';document.getElementById('al').innerHTML='';
   const won=m.n===tgt.n;
   if(won||guesses.length>=MAX){over=true;saveState(won);setTimeout(()=>showResult(won),400);}else saveState(false);
 }
+
 function onInput(){
   const v=document.getElementById('gi').value.toLowerCase().trim();
   const l=document.getElementById('al');l.innerHTML='';sel=-1;if(!v)return;
   const done=new Set(guesses.map(x=>x.m.n));
   M.filter(m=>m.n.toLowerCase().includes(v)&&!done.has(m.n)).slice(0,8).forEach(m=>{
     const i=document.createElement('div');i.className='autocomplete-item';
-    i.innerHTML=m.n+'<span class="gb">G'+m.g+' · '+m.c+'</span>';
+    i.innerHTML=m.n+'<span class="gb-tag">G'+m.g+' · '+m.c+'</span>';
     i.onclick=()=>{document.getElementById('gi').value=m.n;l.innerHTML='';submit();};l.appendChild(i);});
 }
+
 function onKD(e){
   const l=document.getElementById('al');const items=l.querySelectorAll('.autocomplete-item');
   if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,items.length-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(items[sel])document.getElementById('gi').value=items[sel].firstChild.textContent.trim();}
@@ -340,8 +428,10 @@ function onKD(e){
   else if(e.key==='Enter'){e.preventDefault();l.innerHTML='';submit();}
   else if(e.key==='Escape')l.innerHTML='';
 }
+
 document.addEventListener('click',e=>{if(!e.target.closest('.autocomplete-wrap'))document.getElementById('al').innerHTML='';});
 function toggleHelp(){document.getElementById('helpPanel').classList.toggle('open');}
+
 function share(){
   let t='Monster Guessr '+todayStr()+'\n'+guesses.length+'/'+MAX+' essais\n\n';
   guesses.forEach(x=>{const w=x.m.n===tgt.n;t+=x.f.map(f=>f.st==='correct'?'🟩':f.st==='close'?'🟨':'🟥').join('')+(w?' ⚔':'')+'\n';});
@@ -349,6 +439,16 @@ function share(){
   try{navigator.clipboard.writeText(t);}catch(e){}
   const b=document.querySelector('.share-btn');b.textContent='✓ COPIÉ !';setTimeout(()=>b.textContent='📋 COPIER LE RÉSULTAT',2000);
 }
+
+function loadState(){
+  try{const s=JSON.parse(localStorage.getItem('mhg25'));
+  if(!s||s.date!==todayStr())return;
+  guesses=s.guesses||[];over=s.over||false;
+  guesses.forEach(d=>{renderRow(d);renderCard(d);});updateDots();
+  if(over)showResult(s.won);}catch(e){}
+}
+function saveState(won){try{localStorage.setItem('mhg25',JSON.stringify({date:todayStr(),guesses,over,won}));}catch(e){}}
+
 updateDots();loadState();
 if(!over)document.getElementById('gi').focus();
 </script>
