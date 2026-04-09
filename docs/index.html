@@ -18,8 +18,50 @@ h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(20px,5vw,38px);let
 .divider{width:100%;max-width:700px;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--accent),var(--border),transparent);margin:10px 0;position:relative}
 .divider::after{content:'⚔';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--bg);padding:0 10px;color:var(--accent);font-size:14px}
 main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:column;align-items:center;gap:14px}
+
+/* ── Mode switcher ── */
+.mode-sw{display:flex;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:4px}
+.mbtn{background:transparent;border:none;color:var(--text-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;padding:8px 18px;cursor:pointer;border-radius:2px;transition:all .2s;text-transform:uppercase}
+.mbtn.active{background:var(--accent);color:#fff}
+.mbtn.surv.active{background:linear-gradient(135deg,#7a1515,#a02020);color:#ffcccc;text-shadow:0 0 10px #ff4444aa}
+
+/* ── Daily bar ── */
 .timer-bar{display:flex;gap:16px;align-items:center;font-family:'Cinzel',serif;font-size:12px;color:var(--text-dim);letter-spacing:.1em;flex-wrap:wrap;justify-content:center}
 .timer-bar span{color:var(--accent2)}
+
+/* ── Survival bar ── */
+.surv-bar{display:none;gap:18px;align-items:center;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.08em;flex-wrap:wrap;justify-content:center}
+.surv-bar.on{display:flex}
+.sv{display:flex;flex-direction:column;align-items:center;gap:2px}
+.sv-n{font-size:22px;font-weight:900;color:var(--accent2);line-height:1}
+.sv-l{font-size:10px;color:var(--text-dim);letter-spacing:.12em}
+.svdiv{width:1px;height:36px;background:var(--border)}
+.sdots-w{display:flex;flex-direction:column;align-items:center;gap:4px}
+.sdots{display:flex;gap:4px;align-items:center}
+.sdot{width:9px;height:9px;border-radius:50%;background:var(--surface2);border:1px solid var(--border)}
+.sdot.win{background:#27a35a;border-color:#4fdf8a}
+.sdot.used{background:var(--accent);border-color:var(--accent2)}
+
+/* ── Flash ── */
+.flash{width:100%;max-width:620px;padding:0;max-height:0;overflow:hidden;border-radius:2px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.08em;text-align:center;transition:max-height .25s,padding .25s,opacity .3s;opacity:0}
+.flash.on{max-height:60px;padding:12px 16px;opacity:1}
+.flash.on.ok{background:#0d2018;border:1px solid #27a35a;color:#6ee89a}
+.flash.on.ko{background:#1a0a0a;border:1px solid var(--wb);color:#e87070}
+
+/* ── Game over screen ── */
+.send{display:none;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:620px;background:var(--surface2);border:1px solid var(--wb);border-radius:2px;padding:28px 24px;text-align:center;animation:fu .5s ease both}
+.send.on{display:flex}
+.se-t{font-family:'Cinzel',serif;font-size:22px;font-weight:900;letter-spacing:.15em;color:#e87070;text-shadow:0 0 20px #ff444466}
+.se-s{font-style:italic;color:var(--text-dim);font-size:14px}
+.sestats{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
+.sestat{display:flex;flex-direction:column;align-items:center;gap:4px}
+.sestat strong{font-family:'Cinzel',serif;font-size:28px;color:var(--accent2)}
+.sestat span{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:.12em}
+.r2btn{background:linear-gradient(135deg,#7a1515,#a02020);border:none;color:#ffcccc;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.12em;padding:10px 24px;cursor:pointer;border-radius:2px;text-transform:uppercase;transition:all .2s}
+.r2btn:hover{background:linear-gradient(135deg,#a02020,#c03030)}
+.xbtn2{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.1em;padding:8px 18px;cursor:pointer;border-radius:2px;text-transform:uppercase;transition:all .2s}
+.xbtn2:hover{border-color:var(--accent);color:var(--accent2)}
+
 .input-area{width:100%;max-width:620px;display:flex;gap:8px}
 .autocomplete-wrap{position:relative;flex:1}
 .guess-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Cinzel',serif;font-size:14px;padding:12px 16px;outline:none;border-radius:2px;letter-spacing:.05em;transition:border-color .2s}
@@ -34,9 +76,7 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
 .autocomplete-item:hover,.autocomplete-item.selected{background:var(--surface);color:var(--accent2)}
 .autocomplete-item .gb-tag{font-size:10px;color:var(--text-dim);margin-left:auto;white-space:nowrap}
 
-/* ═══════════════════════════════════════════
-   DESKTOP TABLE LAYOUT
-═══════════════════════════════════════════ */
+/* Desktop table */
 .guesses-container{width:100%;overflow-x:auto}
 .guesses-header{display:grid;grid-template-columns:170px repeat(6,1fr);gap:4px;margin-bottom:6px;padding:0 2px}
 .guesses-header div{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;color:var(--text-dim);text-align:center;text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border)}
@@ -50,9 +90,7 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
 .guess-cell.close{background:var(--close);border-color:var(--lb);color:#e8c870}
 .arrow{font-size:9px;opacity:.9;margin-left:2px}
 
-/* ═══════════════════════════════════════════
-   MOBILE CARD LAYOUT
-═══════════════════════════════════════════ */
+/* Mobile cards */
 .guess-cards{display:none;flex-direction:column;gap:8px;width:100%}
 .guess-card{background:var(--surface2);border:1px solid var(--border);border-radius:4px;overflow:hidden;animation:si .35s cubic-bezier(.2,.8,.3,1) both}
 .guess-card-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface)}
@@ -92,8 +130,8 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
 .attempt-dot.used{background:var(--accent);border-color:var(--accent2)}
 .attempt-dot.win{background:#27a35a;border-color:#4fdf8a}
 .attempt-dot.lose{background:var(--wb);border-color:#e87070}
-.share-btn{background:transparent;border:1px solid var(--accent);color:var(--accent2);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.12em;padding:8px 20px;cursor:pointer;transition:all .2s;text-transform:uppercase;border-radius:2px}
-.share-btn:hover{background:var(--accent);color:#fff}
+.share-btn,.share-btn2{background:transparent;border:1px solid var(--accent);color:var(--accent2);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.12em;padding:8px 20px;cursor:pointer;transition:all .2s;text-transform:uppercase;border-radius:2px}
+.share-btn:hover,.share-btn2:hover{background:var(--accent);color:#fff}
 .help-toggle{font-family:'Cinzel',serif;font-size:11px;color:var(--text-dim);letter-spacing:.1em;cursor:pointer;text-decoration:underline;text-underline-offset:3px;background:none;border:none;transition:color .2s}
 .help-toggle:hover{color:var(--accent2)}
 .help-panel{max-width:620px;width:100%;background:var(--surface2);border:1px solid var(--border);padding:14px 16px;border-radius:2px;display:none;flex-direction:column;gap:8px;font-size:13px;line-height:1.7;color:var(--text-dim)}
@@ -108,14 +146,12 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE BREAKPOINTS
-═══════════════════════════════════════════ */
+body.survival-mode .guess-btn{background:linear-gradient(135deg,#7a1515,#a02020)}
+body.survival-mode .guess-btn:hover{background:linear-gradient(135deg,#a02020,#c03030)}
+
 @media(max-width:600px){
-  /* Hide desktop table, show cards */
   .guesses-container{display:none}
   .guess-cards{display:flex}
-  
   h1{font-size:20px}
   .logo-icon{font-size:26px}
   header{padding:18px 16px 10px}
@@ -123,8 +159,6 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
   .guess-input{font-size:13px;padding:11px 14px}
   .guess-btn{font-size:11px;padding:11px 14px;letter-spacing:.06em}
 }
-
-/* Mid-size: tighter table */
 @media(min-width:601px) and (max-width:800px){
   .guesses-header{grid-template-columns:130px repeat(6,1fr)}
   .guess-row{grid-template-columns:130px repeat(6,1fr)}
@@ -144,20 +178,45 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
   <div class="divider"></div>
 </header>
 <main>
-  <div class="timer-bar">
+
+  <!-- Mode switcher -->
+  <div class="mode-sw">
+    <button class="mbtn active" id="btnD" onclick="switchMode('daily')">⚔ Quotidien</button>
+    <button class="mbtn surv"   id="btnS" onclick="switchMode('survival')">💀 Survie</button>
+  </div>
+
+  <!-- Daily bar -->
+  <div class="timer-bar" id="dbar">
     <span id="gcl">0/8</span>
     <div class="attempts-row" id="dots"></div>
     <button class="help-toggle" onclick="toggleHelp()">? COMMENT JOUER</button>
   </div>
+
+  <!-- Survival bar -->
+  <div class="surv-bar" id="sbar">
+    <div class="sv"><div class="sv-n" id="sstreak">0</div><div class="sv-l">🔥 Série</div></div>
+    <div class="svdiv"></div>
+    <div class="sdots-w"><div class="sdots" id="sdots"></div><div class="sv-l">Essais</div></div>
+    <div class="svdiv"></div>
+    <div class="sv"><div class="sv-n" id="sbest">0</div><div class="sv-l">🏆 Record</div></div>
+    <button class="help-toggle" onclick="toggleHelp()">? RÈGLES</button>
+  </div>
+
+  <!-- Help panel -->
   <div class="help-panel" id="helpPanel">
-    <strong>RÈGLES</strong>
-    Devinez le monstre Monster Hunter du jour en max <strong>8 essais</strong>.
+    <strong id="htitle">RÈGLES — QUOTIDIEN</strong>
+    <div id="hd">Devinez le monstre Monster Hunter du jour en max <strong>8 essais</strong>.</div>
+    <div id="hs" style="display:none">Monstres aléatoires à la chaîne — <strong>8 essais par monstre</strong>.<br>Raté → <strong>☠ Game Over !</strong></div>
     <div class="legend-row"><div class="lb2 g"></div><span>Correct — même valeur que la cible</span></div>
     <div class="legend-row"><div class="lb2 y"></div><span>Proche — valeur numériquement adjacente (gén / taille / danger)</span></div>
     <div class="legend-row"><div class="lb2 r"></div><span>Incorrect — valeur différente</span></div>
     <strong>COLONNES :</strong> Classe · Génération · Élément · Taille · Habitat · Dangerosité<br>
     Les flèches ▲▼ indiquent si la cible est plus haute ou plus basse.
   </div>
+
+  <!-- Flash message -->
+  <div class="flash" id="flash"></div>
+
   <div class="input-area">
     <div class="autocomplete-wrap">
       <input class="guess-input" id="gi" type="text" placeholder="Entrez un monstre..." autocomplete="off" oninput="onInput()" onkeydown="onKD(event)"/>
@@ -166,7 +225,7 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
     <button class="guess-btn" id="gb" onclick="submit()">DEVINER</button>
   </div>
 
-  <!-- DESKTOP: table layout -->
+  <!-- Desktop table -->
   <div class="guesses-container">
     <div class="guesses-header">
       <div>MONSTRE</div><div>CLASSE</div><div>GÉN.</div><div>ÉLÉMENT</div><div>TAILLE</div><div>HABITAT</div><div>DANGER</div>
@@ -174,9 +233,10 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
     <div id="gr"></div>
   </div>
 
-  <!-- MOBILE: card layout -->
+  <!-- Mobile cards -->
   <div class="guess-cards" id="gc"></div>
 
+  <!-- Result banner (daily) -->
   <div class="result-banner" id="rb">
     <div class="result-title" id="rt"></div>
     <div class="result-monster" id="rm"></div>
@@ -184,7 +244,22 @@ main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:
     <button class="share-btn" onclick="share()">📋 COPIER LE RÉSULTAT</button>
     <div class="next-timer">Prochain monstre dans : <span id="nt">--:--:--</span></div>
   </div>
+
+  <!-- Game over screen (survival) -->
+  <div class="send" id="send">
+    <div class="se-t">☠ CHASSE TERMINÉE ☠</div>
+    <div class="se-s" id="sedesc"></div>
+    <div class="sestats">
+      <div class="sestat"><strong id="sek">0</strong><span>TUÉS</span></div>
+      <div class="sestat"><strong id="seb">0</strong><span>MEILL. SÉRIE</span></div>
+      <div class="sestat"><strong id="ser">0</strong><span>RECORD</span></div>
+    </div>
+    <button class="r2btn" onclick="sRestart()">🔁 NOUVELLE CHASSE</button>
+    <button class="xbtn2" onclick="sShare()">📋 COPIER LE SCORE</button>
+  </div>
+
 </main>
+
 <script>
 const M=[
   {n:"Rathalos",c:"Flying Wyvern",g:1,e:"Fire",s:3,h:"Forest",d:4},
@@ -322,13 +397,16 @@ const COLS=[
   {key:'d',label:'DANGER'},
 ];
 const MAX=8;
+const $=id=>document.getElementById(id);
+
+/* ══ Helpers ══ */
 function seededShuffle(arr,seed){const a=arr.slice();let s=seed>>>0;for(let i=a.length-1;i>0;i--){s=(Math.imul(s,1664525)+1013904223)>>>0;const j=s%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 function getDayNumber(){const start=new Date('2025-01-01T00:00:00');const today=new Date();today.setHours(0,0,0,0);return Math.floor((today-start)/86400000);}
 function getTodayMonster(){const day=getDayNumber();return seededShuffle(M,day^0xC0FFEE)[day%M.length];}
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
-let tgt=getTodayMonster(),guesses=[],over=false,sel=-1;
+function rndQ(){const a=M.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-function cmp(m){
+function cmp(m,tgt){
   const gd=Math.abs(m.g-tgt.g),sd=Math.abs(m.s-tgt.s),dd=Math.abs(m.d-tgt.d);
   return[
     {v:m.c,st:m.c===tgt.c?'correct':'wrong',a:''},
@@ -340,28 +418,19 @@ function cmp(m){
   ];
 }
 
-/* Desktop row */
-function renderRow(data){
-  const {m,f}=data;
+function mkRow(m,f,tgt){
   const row=document.createElement('div');row.className='guess-row';
   const nc=document.createElement('div');nc.className='guess-cell '+(m.n===tgt.n?'correct':'wrong');nc.textContent=m.n;row.appendChild(nc);
   f.forEach(x=>{const c=document.createElement('div');c.className='guess-cell '+x.st;c.innerHTML=x.v+(x.a?'<span class="arrow"> '+x.a+'</span>':'');row.appendChild(c);});
-  document.getElementById('gr').prepend(row);
+  $('gr').prepend(row);
 }
-
-/* Mobile card */
-function renderCard(data){
-  const {m,f}=data;
+function mkCard(m,f,tgt){
   const isWin=m.n===tgt.n;
   const card=document.createElement('div');card.className='guess-card';
-  
-  // Header with monster name
   const hdr=document.createElement('div');hdr.className='guess-card-header';
   const nm=document.createElement('div');nm.className='card-monster-name '+(isWin?'correct':'wrong');nm.textContent=m.n;
   const badge=document.createElement('div');badge.style.cssText='font-family:Cinzel,serif;font-size:10px;color:var(--text-dim);letter-spacing:.05em';badge.textContent='G'+m.g+' · '+m.c;
   hdr.appendChild(nm);hdr.appendChild(badge);card.appendChild(hdr);
-  
-  // 3-column grid of attributes (skip gen since shown in header)
   const grid=document.createElement('div');grid.className='card-grid';
   COLS.forEach((col,i)=>{
     const x=f[i];
@@ -371,86 +440,188 @@ function renderCard(data){
     val.innerHTML=x.v+(x.a?'<span class="card-arrow"> '+x.a+'</span>':'');
     cell.appendChild(lbl);cell.appendChild(val);grid.appendChild(cell);
   });
-  card.appendChild(grid);
-  document.getElementById('gc').prepend(card);
+  card.appendChild(grid);$('gc').prepend(card);
 }
+function clr(){$('gr').innerHTML='';$('gc').innerHTML='';}
 
-function updateDots(){
-  const r=document.getElementById('dots');r.innerHTML='';
-  for(let i=0;i<MAX;i++){const d=document.createElement('div');d.className='attempt-dot';
-  if(i<guesses.length){const w=guesses[i].m.n===tgt.n;d.classList.add(w?'win':(over&&i===guesses.length-1?'lose':'used'));}r.appendChild(d);}
-  document.getElementById('gcl').innerHTML='<span>'+guesses.length+'/'+MAX+'</span>';
+/* ══ State ══ */
+let mode='daily';
+let tgt=getTodayMonster(),dG=[],dOver=false,dSel=-1;
+let sStr=0,sBst=0,sKil=0,sRec=0;
+let sQ=[],sQi=0,sCur=null,sG=[],sSel=-1,sOver=false;
+
+/* ══ Mode switch ══ */
+function switchMode(m){
+  mode=m;
+  $('btnD').classList.toggle('active',m==='daily');
+  $('btnS').classList.toggle('active',m==='survival');
+  $('dbar').style.display=m==='daily'?'flex':'none';
+  $('sbar').classList.toggle('on',m==='survival');
+  $('htitle').textContent=m==='daily'?'RÈGLES — QUOTIDIEN':'RÈGLES — SURVIE';
+  $('hd').style.display=m==='daily'?'':'none';
+  $('hs').style.display=m==='survival'?'':'none';
+  $('flash').classList.remove('on');
+  document.body.classList.toggle('survival-mode',m==='survival');
+  if(m==='daily'){
+    $('send').classList.remove('on');clr();
+    dG.forEach(x=>{mkRow(x.m,x.f,tgt);mkCard(x.m,x.f,tgt);});
+    updDots();
+    if(dOver) showDRes(dG.some(x=>x.m.n===tgt.n));
+    else $('rb').classList.remove('on');
+    $('gi').disabled=dOver;$('gb').disabled=dOver;
+    if(!dOver) foc();
+  } else {
+    $('rb').classList.remove('on');
+    if(sOver){clr();showSEnd();}
+    else{
+      clr();
+      if(!sCur) sInit();
+      else sG.forEach(x=>{mkRow(x.m,x.f,sCur);mkCard(x.m,x.f,sCur);});
+      updSUI();$('gi').disabled=false;$('gb').disabled=false;foc();
+    }
+  }
 }
+function foc(){setTimeout(()=>$('gi').focus(),60);}
 
-function showResult(won){
-  const b=document.getElementById('rb');b.classList.add('show',won?'win':'lose');
-  document.getElementById('rt').textContent=won?'⚔ PROIE ABATTUE ⚔':'💀 CHASSE ÉCHOUÉE';
-  document.getElementById('rm').textContent='Le monstre était : '+tgt.n;
-  document.getElementById('rd').textContent=won?'Bravo ! '+tgt.n+' identifié en '+guesses.length+' essai'+(guesses.length>1?'s':'')+'.'
+/* ══ Daily ══ */
+function saveD(won){try{localStorage.setItem('mhg25v2',JSON.stringify({date:todayStr(),guesses:dG.map(x=>({n:x.m.n})),over:dOver,won}));}catch(e){}}
+function loadD(){
+  try{
+    const s=JSON.parse(localStorage.getItem('mhg25v2'));
+    if(!s||s.date!==todayStr())return;
+    for(const sv of (s.guesses||[])){const fr=M.find(x=>x.n===sv.n);if(!fr)continue;dG.push({m:fr,f:cmp(fr,tgt)});}
+    dOver=s.over||false;
+    if(mode==='daily'){dG.forEach(x=>{mkRow(x.m,x.f,tgt);mkCard(x.m,x.f,tgt);});updDots();if(dOver)showDRes(s.won);}
+  }catch(e){}
+}
+function updDots(){
+  const r=$('dots');r.innerHTML='';
+  for(let i=0;i<MAX;i++){
+    const d=document.createElement('div');d.className='attempt-dot';
+    if(i<dG.length){const w=dG[i].m.n===tgt.n;d.classList.add(w?'win':(dOver&&i===dG.length-1?'lose':'used'));}
+    r.appendChild(d);
+  }
+  $('gcl').innerHTML='<span>'+dG.length+'/'+MAX+'</span>';
+}
+function showDRes(won){
+  const b=$('rb');b.classList.add('show',won?'win':'lose');
+  $('rt').textContent=won?'⚔ PROIE ABATTUE ⚔':'💀 CHASSE ÉCHOUÉE';
+  $('rm').textContent='Le monstre était : '+tgt.n;
+  $('rd').textContent=won?'Bravo ! '+tgt.n+' identifié en '+dG.length+' essai'+(dG.length>1?'s':'')+'.'
     :tgt.n+' | '+tgt.c+' | Gén.'+tgt.g+' | '+tgt.e+' | Danger: '+'★'.repeat(tgt.d);
-  document.getElementById('gb').disabled=true;document.getElementById('gi').disabled=true;
+  $('gi').disabled=true;$('gb').disabled=true;
   tick();setInterval(tick,1000);
 }
-
 function tick(){
   const now=new Date(),tom=new Date(now);tom.setDate(tom.getDate()+1);tom.setHours(0,0,0,0);
   const diff=tom-now;
-  document.getElementById('nt').textContent=String(Math.floor(diff/3600000)).padStart(2,'0')+':'+String(Math.floor((diff%3600000)/60000)).padStart(2,'0')+':'+String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+  $('nt').textContent=String(Math.floor(diff/3600000)).padStart(2,'0')+':'+String(Math.floor((diff%3600000)/60000)).padStart(2,'0')+':'+String(Math.floor((diff%60000)/1000)).padStart(2,'0');
 }
-
-function submit(){
-  if(over)return;
-  const inp=document.getElementById('gi');const v=inp.value.trim();if(!v)return;
-  const m=M.find(x=>x.n.toLowerCase()===v.toLowerCase());
-  if(!m){inp.style.borderColor='#c0392b';inp.placeholder='Monstre introuvable...';setTimeout(()=>{inp.style.borderColor='';inp.placeholder='Entrez un monstre...';},1500);return;}
-  if(guesses.find(x=>x.m.n===m.n)){inp.style.borderColor='#d4a017';inp.placeholder='Déjà essayé !';setTimeout(()=>{inp.style.borderColor='';inp.placeholder='Entrez un monstre...';},1500);return;}
-  const f=cmp(m);const data={m,f};guesses.push(data);
-  renderRow(data);renderCard(data);updateDots();
-  inp.value='';document.getElementById('al').innerHTML='';
-  const won=m.n===tgt.n;
-  if(won||guesses.length>=MAX){over=true;saveState(won);setTimeout(()=>showResult(won),400);}else saveState(false);
-}
-
-function onInput(){
-  const v=document.getElementById('gi').value.toLowerCase().trim();
-  const l=document.getElementById('al');l.innerHTML='';sel=-1;if(!v)return;
-  const done=new Set(guesses.map(x=>x.m.n));
-  M.filter(m=>m.n.toLowerCase().includes(v)&&!done.has(m.n)).slice(0,8).forEach(m=>{
-    const i=document.createElement('div');i.className='autocomplete-item';
-    i.innerHTML=m.n+'<span class="gb-tag">G'+m.g+' · '+m.c+'</span>';
-    i.onclick=()=>{document.getElementById('gi').value=m.n;l.innerHTML='';submit();};l.appendChild(i);});
-}
-
-function onKD(e){
-  const l=document.getElementById('al');const items=l.querySelectorAll('.autocomplete-item');
-  if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,items.length-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(items[sel])document.getElementById('gi').value=items[sel].firstChild.textContent.trim();}
-  else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(sel>=0&&items[sel])document.getElementById('gi').value=items[sel].firstChild.textContent.trim();}
-  else if(e.key==='Enter'){e.preventDefault();l.innerHTML='';submit();}
-  else if(e.key==='Escape')l.innerHTML='';
-}
-
-document.addEventListener('click',e=>{if(!e.target.closest('.autocomplete-wrap'))document.getElementById('al').innerHTML='';});
-function toggleHelp(){document.getElementById('helpPanel').classList.toggle('open');}
-
 function share(){
-  let t='Monster Guessr '+todayStr()+'\n'+guesses.length+'/'+MAX+' essais\n\n';
-  guesses.forEach(x=>{const w=x.m.n===tgt.n;t+=x.f.map(f=>f.st==='correct'?'🟩':f.st==='close'?'🟨':'🟥').join('')+(w?' ⚔':'')+'\n';});
+  let t='Monster Guessr '+todayStr()+'\n'+dG.length+'/'+MAX+' essais\n\n';
+  dG.forEach(x=>{const w=x.m.n===tgt.n;t+=x.f.map(f=>f.st==='correct'?'🟩':f.st==='close'?'🟨':'🟥').join('')+(w?' ⚔':'')+'\n';});
   t+='\nhttps://VOTRE-USERNAME.github.io/monster-guessr';
   try{navigator.clipboard.writeText(t);}catch(e){}
   const b=document.querySelector('.share-btn');b.textContent='✓ COPIÉ !';setTimeout(()=>b.textContent='📋 COPIER LE RÉSULTAT',2000);
 }
 
-function loadState(){
-  try{const s=JSON.parse(localStorage.getItem('mhg25'));
-  if(!s||s.date!==todayStr())return;
-  guesses=s.guesses||[];over=s.over||false;
-  guesses.forEach(d=>{renderRow(d);renderCard(d);});updateDots();
-  if(over)showResult(s.won);}catch(e){}
+/* ══ Survival ══ */
+function loadRec(){try{const s=JSON.parse(localStorage.getItem('mhg_surv'));if(s)sRec=s.best||0;}catch(e){}}
+function saveRec(){try{localStorage.setItem('mhg_surv',JSON.stringify({best:sRec}));}catch(e){}}
+function sInit(){sStr=0;sBst=0;sKil=0;sQ=rndQ();sQi=0;sOver=false;$('send').classList.remove('on');sNext();}
+function sNext(){if(sQi>=sQ.length){sQ=rndQ();sQi=0;}sCur=sQ[sQi++];sG=[];clr();$('flash').classList.remove('on');$('gi').disabled=false;$('gb').disabled=false;foc();updSUI();}
+function updSUI(){
+  $('sstreak').textContent=sStr;$('sbest').textContent=sRec;
+  const el=$('sdots');el.innerHTML='';
+  for(let i=0;i<MAX;i++){const d=document.createElement('div');d.className='sdot';if(i<sG.length)d.classList.add(sG[i]&&sG[i].m.n===sCur.n?'win':'used');el.appendChild(d);}
 }
-function saveState(won){try{localStorage.setItem('mhg25',JSON.stringify({date:todayStr(),guesses,over,won}));}catch(e){}}
+function showFlash(type,msg){
+  const f=$('flash');f.className='flash on '+(type==='ok'?'ok':'ko');f.textContent=msg;
+  clearTimeout(f._t);f._t=setTimeout(()=>f.classList.remove('on'),2500);
+}
+function sGameOver(name){
+  sOver=true;if(sStr>sRec){sRec=sStr;saveRec();}
+  showFlash('ko','☠ '+name+' — Game Over !');
+  $('gi').disabled=true;$('gb').disabled=true;
+  setTimeout(()=>showSEnd(),1500);
+}
+function sCorrect(){
+  sKil++;sStr++;if(sStr>sBst)sBst=sStr;if(sStr>sRec){sRec=sStr;saveRec();}
+  showFlash('ok','⚔ '+sCur.n+' abattu'+(sStr>=3?' 🔥 ×'+sStr:'!'));
+  $('gi').disabled=true;$('gb').disabled=true;updSUI();
+  setTimeout(()=>sNext(),1900);
+}
+function showSEnd(){
+  clr();$('send').classList.add('on');
+  $('sedesc').innerHTML='Série de <em>'+sStr+'</em> — '+sKil+' monstre'+(sKil>1?'s':'')+' tué'+(sKil>1?'s':'')+'.';
+  $('sek').textContent=sKil;$('seb').textContent=sBst;$('ser').textContent=sRec;
+  $('gi').disabled=true;$('gb').disabled=true;updSUI();
+}
+function sRestart(){sInit();}
+function sShare(){
+  const t='Monster Guessr — Survie\nSérie : '+sStr+'\nTués : '+sKil+'\nRecord : '+sRec+'\n\nhttps://VOTRE-USERNAME.github.io/monster-guessr';
+  try{navigator.clipboard.writeText(t);}catch(e){}
+  const b=document.querySelector('.xbtn2');b.textContent='✓ COPIÉ !';setTimeout(()=>b.textContent='📋 COPIER LE SCORE',2000);
+}
 
-updateDots();loadState();
-if(!over)document.getElementById('gi').focus();
+/* ══ Submit ══ */
+function submit(){mode==='daily'?subD():subS();}
+function subD(){
+  if(dOver)return;
+  const inp=$('gi');const v=inp.value.trim();if(!v)return;
+  const m=M.find(x=>x.n.toLowerCase()===v.toLowerCase());
+  if(!m){shake(inp,'Monstre introuvable...');return;}
+  if(dG.find(x=>x.m.n===m.n)){shake(inp,'Déjà essayé !');return;}
+  const f=cmp(m,tgt);dG.push({m,f});
+  mkRow(m,f,tgt);mkCard(m,f,tgt);updDots();
+  inp.value='';$('al').innerHTML='';
+  const won=m.n===tgt.n;
+  if(won||dG.length>=MAX){dOver=true;saveD(won);setTimeout(()=>showDRes(won),400);}else saveD(false);
+}
+function subS(){
+  if(sOver||!sCur)return;
+  const inp=$('gi');const v=inp.value.trim();if(!v)return;
+  const m=M.find(x=>x.n.toLowerCase()===v.toLowerCase());
+  if(!m){shake(inp,'Monstre introuvable...');return;}
+  if(sG.find(x=>x.m.n===m.n)){shake(inp,'Déjà essayé !');return;}
+  const f=cmp(m,sCur);sG.push({m,f});
+  mkRow(m,f,sCur);mkCard(m,f,sCur);
+  inp.value='';$('al').innerHTML='';updSUI();
+  if(m.n===sCur.n)sCorrect();
+  else if(sG.length>=MAX)sGameOver(sCur.n);
+}
+function shake(inp,msg){
+  inp.style.borderColor='#c0392b';inp.placeholder=msg;
+  inp.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}],{duration:240});
+  setTimeout(()=>{inp.style.borderColor='';inp.placeholder='Entrez un monstre...';},1500);
+}
+
+/* ══ Autocomplete ══ */
+function onInput(){
+  const v=$('gi').value.toLowerCase().trim();
+  const l=$('al');l.innerHTML='';
+  if(mode==='daily')dSel=-1;else sSel=-1;
+  if(!v)return;
+  const done=new Set((mode==='daily'?dG:sG).map(x=>x.m.n));
+  M.filter(m=>m.n.toLowerCase().includes(v)&&!done.has(m.n)).slice(0,8).forEach(m=>{
+    const i=document.createElement('div');i.className='autocomplete-item';
+    i.innerHTML=m.n+'<span class="gb-tag">G'+m.g+' · '+m.c+'</span>';
+    i.onclick=()=>{$('gi').value=m.n;l.innerHTML='';submit();};l.appendChild(i);
+  });
+}
+function onKD(e){
+  const l=$('al');const items=l.querySelectorAll('.autocomplete-item');
+  let sel=mode==='daily'?dSel:sSel;
+  if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,items.length-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(items[sel])$('gi').value=items[sel].firstChild.textContent.trim();}
+  else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(sel>=0&&items[sel])$('gi').value=items[sel].firstChild.textContent.trim();}
+  else if(e.key==='Enter'){e.preventDefault();l.innerHTML='';submit();}
+  else if(e.key==='Escape')l.innerHTML='';
+  if(mode==='daily')dSel=sel;else sSel=sel;
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.autocomplete-wrap'))$('al').innerHTML='';});
+function toggleHelp(){$('helpPanel').classList.toggle('open');}
+
+loadRec();updDots();loadD();if(!dOver)foc();
 </script>
 </body>
 </html>
