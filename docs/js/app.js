@@ -216,6 +216,12 @@ function submit(name) {
     addRow(monster);
     updateLiveDots();
 
+    // Sauvegarde en cours de partie (daily)
+    if (state.mode === 'daily') {
+        localStorage.setItem('mg_daily_date', new Date().toDateString());
+        localStorage.setItem('mg_daily_attempts', JSON.stringify(state.attempts));
+    }
+
     if (monster.n === state.target.n) {
         endGame(true);
     } else if (state.mode === 'daily' && state.attempts.length >= MAX) {
@@ -345,7 +351,8 @@ function restoreDaily() {
     state.attempts = savedAttempts;
     savedAttempts.forEach(m => addRow(m));
     updateLiveDots();
-    endGame(savedState === 'win');
+    // Partie terminée → afficher le résultat ; sinon juste remettre les lignes
+    if (savedState) endGame(savedState === 'win');
 }
 
 // ── Flash ──────────────────────────────────
