@@ -318,7 +318,12 @@ function addGuessRow(monster) {
         
         // Texte d'affichage de la cellule
         let displayValue = monster[col.key];
-        if (col.key === 's') displayValue = SL[monster.s]; // Traduction de la taille (ex: 3 -> Large)
+        if (col.key === 's') {
+            displayValue = SL[monster.s]; // Traduction de la taille (ex: 3 -> Large)
+        } else if (col.key === 'd') {
+            // TRANSFORMATION EN ÉTOILES POUR LE DANGER (ex: 4 -> ★★★★☆)
+            displayValue = "★".repeat(monster.d) + "☆".repeat(5 - monster.d);
+        }
         
         // Ajout d'une flèche indicative si numérique
         const arrow = getArrow(col.key, monster[col.key]);
@@ -339,8 +344,15 @@ function addGuessRow(monster) {
         <div class="card-grid">
             ${COLS.map(col => {
                 const state = checkProperty(col.key, monster[col.key]);
+                
                 let val = monster[col.key];
-                if (col.key === 's') val = SL[monster.s];
+                if (col.key === 's') {
+                    val = SL[monster.s];
+                } else if (col.key === 'd') {
+                    // TRANSFORMATION EN ÉTOILES POUR LE MOBILE AUSSI
+                    val = "★".repeat(monster.d) + "☆".repeat(5 - monster.d);
+                }
+                
                 const arrow = getArrow(col.key, monster[col.key]);
                 return `
                     <div class="card-cell ${state}">
