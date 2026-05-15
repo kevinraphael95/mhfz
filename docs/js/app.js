@@ -417,7 +417,7 @@ function handleEndGame(isWin) {
         } else {
             // Vrai Game Over Survie
             const goScreen = document.getElementById('game-over-screen');
-            document.getElementById('go-title').textContent = "FIN DE RUN";
+            document.getElementById('go-title').textContent = "QUEST FAILED !";
             document.getElementById('go-message').textContent = `Vous avez été terrassé par le ${targetMonster.n}.`;
             document.getElementById('stat-streak').textContent = survivalScore;
             document.getElementById('stat-guesses').textContent = attempts.length;
@@ -430,7 +430,7 @@ function showResultBanner(isWin) {
     const banner = document.getElementById('result-banner');
     banner.className = `result-banner show ${isWin ? 'win' : 'lose'}`;
     
-    document.getElementById('res-title').textContent = isWin ? "CHASSE EFFECTUÉE !" : "CAMPEMENT DESTROYED !";
+    document.getElementById('res-title').textContent = isWin ? "CHASSE EFFECTUÉE !" : "QUEST FAILED !";
     document.getElementById('res-monster').textContent = targetMonster.n;
     document.getElementById('res-desc').textContent = isWin 
         ? `Félicitations. Vous avez localisé la créature en ${attempts.length} essais.` 
