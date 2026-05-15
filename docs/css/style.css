@@ -46,10 +46,10 @@
 
 /* ── Thème clair ── */
 [data-theme="light"] {
-  --bg:          #f5f0e8;
-  --surface:     #ede6d8;
-  --surface2:    #e0d6c4;
-  --surface3:    #d4c8b0;
+  --bg:       #f5f0e8;
+  --surface:  #ede6d8;
+  --surface2: #e0d6c4;
+  --surface3: #d4c8b0;
   --border:      #9a8860;
   --border2:     #7a6840;
 
