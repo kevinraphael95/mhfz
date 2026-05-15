@@ -31,14 +31,9 @@
             <button class="mbtn besti-mbtn" id="btn-bestiary">Bestiaire</button>
         </div>
 
-        <!-- Compteur de tentatives (daily uniquement) -->
-        <div class="attempts-counter hidden" id="attempts-counter">
-            Tentatives : <span id="attempts-count">0</span> / 8
-        </div>
-
-        <!-- Compteur quotidien -->
-        <div class="timer-bar" id="daily-timer-bar">
-            Prochain monstre dans : <span id="global-timer">00:00:00</span>
+        <!-- Boules de tentatives (daily uniquement) -->
+        <div class="daily-dots-bar hidden" id="daily-dots-bar">
+            <div class="daily-dots" id="daily-dots"></div>
         </div>
 
         <!-- Barre de statistiques en Mode Survie -->
@@ -55,13 +50,11 @@
             <div class="svdiv"></div>
             <div class="sdots-w">
                 <span class="sv-l">Vies</span>
-                <div class="sdots" id="surv-lives-container">
-                    <!-- Généré dynamiquement -->
-                </div>
+                <div class="sdots" id="surv-lives-container"></div>
             </div>
         </div>
 
-        <!-- Bandeau Flash (Erreurs / Succès rapides) -->
+        <!-- Bandeau Flash -->
         <div class="flash" id="flash-msg"></div>
 
         <!-- Zone d'écriture et autocomplétion -->
@@ -73,7 +66,7 @@
             <button id="guess-btn" class="guess-btn">Chasser</button>
         </div>
 
-        <!-- Écran Game Over (Spécifique fin de partie) -->
+        <!-- Écran Game Over (Survie) -->
         <div class="send" id="game-over-screen">
             <div class="se-t" id="go-title">FIN DE CHASSE</div>
             <div class="se-s" id="go-message">Le monstre a pris la fuite...</div>
@@ -84,16 +77,12 @@
             <button class="r2btn" id="retry-btn">Nouvelle Traque</button>
         </div>
 
-        <!-- Bannière de résultat principal -->
+        <!-- Bannière de résultat (daily) -->
         <div class="result-banner" id="result-banner">
             <div class="result-title" id="res-title">VICTOIRE !</div>
             <div class="result-monster" id="res-monster">Rathalos</div>
             <div class="result-desc" id="res-desc">Un magnifique spécimen terrassé avec succès.</div>
-            
-            <div class="attempts-row" id="attempts-dots-row">
-                <!-- Les petites billes de tentatives s'affichent ici -->
-            </div>
-
+            <div class="attempts-row" id="attempts-dots-row"></div>
             <div class="next-timer" id="res-timer-container">
                 Prochaine cible dans : <span id="res-timer">00:00:00</span>
             </div>
@@ -102,7 +91,7 @@
             </div>
         </div>
 
-        <!-- Affichage ordinateur (Tableau de scores) -->
+        <!-- Affichage ordinateur -->
         <div class="guesses-container">
             <div class="guesses-header" id="table-header">
                 <div style="text-align: left; padding-left: 8px;">MONSTRE</div>
@@ -116,13 +105,11 @@
             <div id="desktop-rows-container"></div>
         </div>
 
-        <!-- Affichage mobile (Cards empilées) -->
+        <!-- Affichage mobile -->
         <div class="guess-cards" id="mobile-cards-container"></div>
     </main>
 
-    <!-- ══════════════════════════════════════
-         MODAL — COMMENT JOUER
-    ══════════════════════════════════════ -->
+    <!-- MODAL — COMMENT JOUER -->
     <div class="modal-overlay" id="modal-help">
         <div class="modal-box">
             <div class="modal-header">
@@ -142,9 +129,7 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         MODAL — BESTIAIRE
-    ══════════════════════════════════════ -->
+    <!-- MODAL — BESTIAIRE -->
     <div class="modal-overlay" id="modal-bestiary">
         <div class="modal-box modal-large">
             <div class="modal-header">
