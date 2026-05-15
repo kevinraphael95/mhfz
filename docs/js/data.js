@@ -144,10 +144,10 @@ const M=[
   {n:"Grand Baggi",c:"Wyverne rapace",g:3,e:"Aucun",s:2,h:"Tundra",d:2}, // ~11.0 m
   {n:"Grand Jaggi",c:"Wyverne rapace",g:3,e:"Aucun",s:1,h:"Forêt",d:1}, // ~9.4 m
   {n:"Grand Wroggi",c:"Wyverne rapace",g:3,e:"Poison",s:1,h:"Volcan",d:2}, // ~9.6 m
-  {n:"Jhen Mohran",c:"Dragon ancien",g:3,e:"🐉 Dragon",s:4,h:"Désert",d:5}, // ~111.6 m
-  {n:"Jhen Mohran sacré",c:"Dragon ancien",g:3,e:"🐉 Dragon",s:4,h:"Désert",d:5}, // ~111.6 m
+  {n:"Jhen Mohran",c:"Dragon ancien",g:3,e:"🐉 Dragon",s:5,h:"Désert",d:5}, // ~111.6 m
+  {n:"Jhen Mohran sacré",c:"Dragon ancien",g:3,e:"🐉 Dragon",s:5,h:"Désert",d:5}, // ~111.6 m
   {n:"Lagiacrus",c:"Léviathan",g:3,e:"⚡ Foudre",s:3,h:"Océan",d:4}, // ~26.4 m
-  {n:"Lagiacrus abyssal",c:"Léviathan",g:3,e:"⚡ Foudre",s:3,h:"Océan",d:5}, // ~33.8 m
+  {n:"Lagiacrus abyssal",c:"Léviathan",g:3,e:"⚡ Foudre",s:4,h:"Océan",d:5}, // ~33.8 m
   {n:"Lagiacrus ivoire",c:"Léviathan",g:3,e:"⚡ Foudre",s:3,h:"Océan",d:4}, // ~26.4 m
   {n:"Lagombi",c:"Bête à crocs",g:3,e:"🧊 Glace",s:1,h:"Tundra",d:2}, // ~5.6 m
   {n:"Ludroth pourpre",c:"Léviathan",g:3,e:"Poison",s:2,h:"Marais",d:3}, // ~15.8 m
@@ -172,9 +172,9 @@ const M=[
   {n:"Basarios rubis",c:"Wyverne volante",g:4,e:"🔥 Feu",s:2,h:"Volcan",d:3}, // ~14.3 m
   {n:"Brachydios tempête",c:"Wyverne brute",g:4,e:"Blast",s:3,h:"Volcan",d:5}, // ~21.2 m
   {n:"Ceanataur Brise-os",c:"Carapaceon",g:4,e:"💧 Eau",s:2,h:"Marais",d:4}, // ~13.5 m
-  {n:"Dah'ren Mohran",c:"Dragon ancien",g:4,e:"Aucun",s:4,h:"Désert",d:5}, // ~114.5 m
-  {n:"Dalamadur",c:"Dragon ancien",g:4,e:"Aucun",s:4,h:"Montagne",d:5}, // ~440.4 m
-  {n:"Dalamadur Shah",c:"Dragon ancien",g:4,e:"🔥 Feu",s:4,h:"Montagne",d:5}, // ~440.4 m
+  {n:"Dah'ren Mohran",c:"Dragon ancien",g:4,e:"Aucun",s:5,h:"Désert",d:5}, // ~114.5 m
+  {n:"Dalamadur",c:"Dragon ancien",g:4,e:"Aucun",s:5,h:"Montagne",d:5}, // ~440.4 m
+  {n:"Dalamadur Shah",c:"Dragon ancien",g:4,e:"🔥 Feu",s:5,h:"Montagne",d:5}, // ~440.4 m
   {n:"Diablos Bain-de-sang",c:"Wyverne volante",g:4,e:"Aucun",s:3,h:"Désert",d:5}, // ~24.8 m
   {n:"Gammoth",c:"Bête à crocs",g:4,e:"🧊 Glace",s:3,h:"Tundra",d:4}, // ~22.3 m (Massif)
   {n:"Gammoth Givre-ancien",c:"Bête à crocs",g:4,e:"🧊 Glace",s:3,h:"Tundra",d:5}, // ~25.5 m
@@ -193,8 +193,8 @@ const M=[
   {n:"Malfestio Lune-noire",c:"Wyverne rapace",g:4,e:"Aucun",s:1,h:"Forêt",d:4}, // ~11.1 m
   {n:"Mizutsune",c:"Léviathan",g:4,e:"💧 Eau",s:3,h:"Marais",d:4}, // ~19.8 m
   {n:"Mizutsune Perce-âme",c:"Léviathan",g:4,e:"💧 Eau / 🔥 Feu",s:3,h:"Marais",d:5}, // ~22.4 m
-  {n:"Najarala",c:"Wyverne serpent",g:4,e:"Aucun",s:3,h:"Désert",d:3}, // ~40.2 m (Très long)
-  {n:"Najarala du déluge",c:"Wyverne serpent",g:4,e:"💧 Eau",s:3,h:"Marais",d:4}, // ~40.2 m
+  {n:"Najarala",c:"Wyverne serpent",g:4,e:"Aucun",s:4,h:"Désert",d:3}, // ~40.2 m (Très long)
+  {n:"Najarala du déluge",c:"Wyverne serpent",g:4,e:"💧 Eau",s:4,h:"Marais",d:4}, // ~40.2 m
   {n:"Nakarkos",c:"Dragon ancien",g:4,e:"🐉 Dragon",s:4,h:"Cave",d:5}, // ~42.9 m
   {n:"Nargacuga Vent-acier",c:"Wyverne volante",g:4,e:"Aucun",s:3,h:"Forêt",d:5}, // ~22.6 m
   {n:"Nerscylla",c:"Temnocéran",g:4,e:"Poison",s:2,h:"Cave",d:3}, // ~11.2 m
@@ -282,7 +282,7 @@ const M=[
   {n:"Valstrax écarlate éveillé",c:"Dragon ancien",g:5,e:"🐉 Dragon",s:3,h:"Montagne",d:5}, // ~23.2 m
   {n:"Velkhana",c:"Dragon ancien",g:5,e:"🧊 Glace",s:3,h:"Tundra",d:5}, // ~25.8 m
   {n:"Xeno'jiiva",c:"Dragon ancien",g:5,e:"🐉 Dragon",s:4,h:"Cave",d:5}, // ~45.1 m
-  {n:"Zorah Magdaros",c:"Dragon ancien",g:5,e:"🔥 Feu",s:4,h:"Océan",d:5}, // ~257.9 m
+  {n:"Zorah Magdaros",c:"Dragon ancien",g:5,e:"🔥 Feu",s:5,h:"Océan",d:5}, // ~257.9 m
 
 // --- GÉNÉRATION 6 ---
   {n:"Ajarakan",c:"Bête à crocs",g:6,e:"🔥 Feu",s:2,h:"Volcan",d:4}, // ~13.5 m
