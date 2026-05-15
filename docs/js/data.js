@@ -33,6 +33,15 @@ CLASSES DE MONSTRES (Mogapedia) :
 */
 
 /*
+TAILLE
+- Petit : <10m
+- Moyen : 10m - 18m
+- Grand : 18m - 30m
+- Géant : 30m - 100m
+- Colossal : >100m
+*/
+
+/*
 STATUTS ET FLÉAUX (Ailments & Blights) :
 - Boue / Neige / Toile (Muddy / Snowy / Webbed)
 - Étourdissement (Stun)
