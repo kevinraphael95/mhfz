@@ -100,27 +100,63 @@ body {
 
 /* ── Header ── */
 header {
-  width: 100%; max-width: 960px;
-  padding: 28px 20px 12px;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-banner {
+  width: 100%;
   position: relative;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 0 0 4px 4px;
 }
-.header-top {
-  width: 100%; display: flex; align-items: center; justify-content: center; position: relative;
+
+.header-bg {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
 }
-.logo-row { display: flex; align-items: center; gap: 14px; }
-.logo-icon { font-size: 32px; animation: glow-pulse 3s ease-in-out infinite; }
-@keyframes glow-pulse {
-  0%,100% { filter: drop-shadow(0 0 10px rgba(212,146,46,.4)); }
-  50%      { filter: drop-shadow(0 0 24px rgba(212,146,46,.8)); }
+
+.header-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,8,5,.25) 0%,
+    rgba(10,8,5,.55) 60%,
+    rgba(10,8,5,.85) 100%
+  );
 }
-h1 {
-  font-family: 'Cinzel', serif; font-weight: 900;
-  font-size: clamp(20px,5vw,38px); letter-spacing: .08em;
-  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+
+.header-content {
+  position: absolute;
+  bottom: 22px; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
 }
-.subtitle { font-style: italic; color: var(--text-dim); font-size: 13px; letter-spacing: .15em; }
+
+#theme-toggle {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: rgba(10,8,5,.55);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .1em;
+  padding: 7px 12px; cursor: pointer; border-radius: 2px;
+  transition: all .2s; display: flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+#theme-toggle:hover { border-color: var(--accent); color: var(--accent2); }
+#theme-toggle .t-icon { font-size: 14px; }
+
+@media (max-width: 600px) {
+  .header-banner { height: 140px; }
+  #theme-toggle .t-label { display: none; }
+  #theme-toggle { padding: 6px 9px; font-size: 10px; }
+}
 
 /* ── Theme toggle ── */
 #theme-toggle {
