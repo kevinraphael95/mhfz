@@ -23,6 +23,16 @@ CLASSES DE MONSTRES (Mogapedia) :
 */
 
 /*
+GÉNÉRATIONS ET JEUX (Generations & Games) :
+- Génération 1 : Monster Hunter, MH G, MH Freedom
+- Génération 2 : Monster Hunter 2 (dos), MH Freedom 2, MH Freedom Unite
+- Génération 3 : Monster Hunter Tri, MH Portable 3rd, MH 3 Ultimate
+- Génération 4 : Monster Hunter 4, MH 4 Ultimate, MH Generations, MH Generations Ultimate
+- Génération 5 : Monster Hunter: World, MH World: Iceborne, MH Rise, MH Rise: Sunbreak
+- Génération 6 : Monster Hunter Wilds
+*/
+
+/*
 STATUTS ET FLÉAUX (Ailments & Blights) :
 - Boue / Neige / Toile (Muddy / Snowy / Webbed)
 - Étourdissement (Stun)
