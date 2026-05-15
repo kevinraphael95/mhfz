@@ -421,3 +421,32 @@ function renderBestiary() {
             </div>
         </div>`).join('');
 }
+
+
+// ── KONAMI CODE ───────────────────────────────────────────────
+(function () {
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
+  let buf = [];
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target === $('guess-input')) return;
+    buf.push(e.key); if (buf.length > KONAMI.length) buf.shift();
+    if (buf.join(',') === KONAMI.join(',')) { buf = []; triggerKonami(); }
+  });
+
+  function triggerKonami() {
+    if (document.getElementById('konami-modal')) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'konami-modal';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    overlay.innerHTML = `
+      <div style="background:var(--panel,#1a1a2e);border:1px solid var(--border,#444);padding:2rem 2.5rem;text-align:center;max-width:320px;font-family:'DM Sans',sans-serif;">
+        <p style="font-size:1.1rem;color:var(--white,#fff);margin:0 0 1.5rem;font-weight:600;letter-spacing:.05em;">PAS DE EASTER EGG À VOIR ICI</p>
+        <button id="konami-close" style="background:none;border:1px solid var(--border,#444);color:var(--muted,#aaa);padding:.45rem 1.2rem;cursor:pointer;font-size:.85rem;font-family:'DM Sans',sans-serif;">ok ok</button>
+      </div>`;
+    document.body.appendChild(overlay);
+    const close = () => overlay.remove();
+    document.getElementById('konami-close').addEventListener('click', close);
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  }
+})();
