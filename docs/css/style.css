@@ -349,30 +349,39 @@ body.survival-mode .guess-btn:hover { background: var(--surv-hover); }
 
 /* ── Desktop table ── */
 .guesses-container { width: 100%; overflow-x: auto; }
+
 .guesses-header {
   display: grid; grid-template-columns: 170px repeat(6,1fr);
-  gap: 4px; margin-bottom: 6px; padding: 0 2px;
+  gap: 0; border: 1px solid var(--border2);
+  border-bottom: 2px solid var(--accent);
+  background: var(--surface);
 }
 .guesses-header div {
   font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700;
   letter-spacing: .12em; color: var(--text-sub); text-align: center;
-  text-transform: uppercase; padding: 5px 0; border-bottom: 2px solid var(--border);
+  text-transform: uppercase; padding: 8px 4px;
+  border-right: 1px solid var(--border);
 }
+.guesses-header div:last-child { border-right: none; }
+
 .guess-row {
   display: grid; grid-template-columns: 170px repeat(6,1fr);
-  gap: 4px; margin-bottom: 4px; animation: slide-in .35s cubic-bezier(.2,.8,.3,1) both;
+  gap: 0; border: 1px solid var(--border); border-top: none;
+  animation: slide-in .35s cubic-bezier(.2,.8,.3,1) both;
 }
 @keyframes slide-in { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+
 .guess-cell {
-  background: var(--surface2); border: 1px solid var(--border);
+  background: var(--surface2); border-right: 1px solid var(--border);
   padding: 10px 6px; text-align: center; font-family: 'Cinzel', serif;
-  font-size: 11px; font-weight: 700; letter-spacing: .04em; border-radius: 2px;
+  font-size: 11px; font-weight: 700; letter-spacing: .04em;
   min-height: 48px; display: flex; align-items: center; justify-content: center;
   line-height: 1.3; color: var(--text-sub);
 }
-.guess-cell.correct { background: var(--correct-bg); border-color: var(--correct-bd); color: var(--correct-tx); }
-.guess-cell.wrong   { background: var(--wrong-bg);   border-color: var(--wrong-bd);   color: var(--wrong-tx); }
-.guess-cell.close   { background: var(--close-bg);   border-color: var(--close-bd);   color: var(--close-tx); }
+.guess-cell:last-child { border-right: none; }
+.guess-cell.correct { background: var(--correct-bg); color: var(--correct-tx); }
+.guess-cell.wrong   { background: var(--wrong-bg);   color: var(--wrong-tx); }
+.guess-cell.close   { background: var(--close-bg);   color: var(--close-tx); }
 
 /* ── Mobile cards ── */
 .guess-cards { display: none; flex-direction: column; gap: 8px; width: 100%; }
