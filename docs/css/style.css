@@ -6,12 +6,12 @@
 
 /* ── Thème sombre ── */
 :root, [data-theme="dark"] {
-  --bg:          #141008;
-  --surface:     #1c1610;
-  --surface2:    #231c12;
-  --surface3:    #2b2318;
-  --border:      #4a3c28;
-  --border2:     #5a4a34;
+  --bg:       #8a7550;
+  --surface:  #9a8560;
+  --surface2: #a8926d;
+  --surface3: #b5a07a;
+  --border:   #c4b088;
+  --border2:  #d0bc96;
 
   --accent:      #d4922e;
   --accent2:     #f0b84e;
