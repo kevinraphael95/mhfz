@@ -1,627 +1,130 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monster Guesser — Monster Hunter Edition</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0a0805;--surface:#13100c;--surface2:#1e1912;--border:#3a2e1e;--accent:#c8832a;--accent2:#e8a84a;--text:#e8dcc8;--text-dim:#8a7a60;--correct:#1a3a25;--wrong:#3a1515;--close:#3a2e00;--cb:#27a35a;--wb:#c0392b;--lb:#d4a017}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
-header{width:100%;max-width:960px;padding:28px 20px 12px;display:flex;flex-direction:column;align-items:center;gap:4px}
-.logo-row{display:flex;align-items:center;gap:14px}
-.logo-icon{font-size:32px;animation:pg 3s ease-in-out infinite}
-@keyframes pg{0%,100%{filter:drop-shadow(0 0 10px #c8832a66)}50%{filter:drop-shadow(0 0 22px #c8832aaa)}}
-h1{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(20px,5vw,38px);letter-spacing:.08em;background:linear-gradient(135deg,#c8832a,#e8a84a,#c8832a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.subtitle{font-family:'Crimson Pro',serif;font-style:italic;color:var(--text-dim);font-size:13px;letter-spacing:.15em}
-.divider{width:100%;max-width:700px;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--accent),var(--border),transparent);margin:10px 0;position:relative}
-.divider::after{content:'⚔';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--bg);padding:0 10px;color:var(--accent);font-size:14px}
-main{width:100%;max-width:960px;padding:0 12px 40px;display:flex;flex-direction:column;align-items:center;gap:14px}
-
-/* ── Mode switcher ── */
-.mode-sw{display:flex;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:4px}
-.mbtn{background:transparent;border:none;color:var(--text-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;padding:8px 18px;cursor:pointer;border-radius:2px;transition:all .2s;text-transform:uppercase}
-.mbtn.active{background:var(--accent);color:#fff}
-.mbtn.surv.active{background:linear-gradient(135deg,#7a1515,#a02020);color:#ffcccc;text-shadow:0 0 10px #ff4444aa}
-
-/* ── Daily bar ── */
-.timer-bar{display:flex;gap:16px;align-items:center;font-family:'Cinzel',serif;font-size:12px;color:var(--text-dim);letter-spacing:.1em;flex-wrap:wrap;justify-content:center}
-.timer-bar span{color:var(--accent2)}
-
-/* ── Survival bar ── */
-.surv-bar{display:none;gap:18px;align-items:center;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.08em;flex-wrap:wrap;justify-content:center}
-.surv-bar.on{display:flex}
-.sv{display:flex;flex-direction:column;align-items:center;gap:2px}
-.sv-n{font-size:22px;font-weight:900;color:var(--accent2);line-height:1}
-.sv-l{font-size:10px;color:var(--text-dim);letter-spacing:.12em}
-.svdiv{width:1px;height:36px;background:var(--border)}
-.sdots-w{display:flex;flex-direction:column;align-items:center;gap:4px}
-.sdots{display:flex;gap:4px;align-items:center}
-.sdot{width:9px;height:9px;border-radius:50%;background:var(--surface2);border:1px solid var(--border)}
-.sdot.win{background:#27a35a;border-color:#4fdf8a}
-.sdot.used{background:var(--accent);border-color:var(--accent2)}
-
-/* ── Flash ── */
-.flash{width:100%;max-width:620px;padding:0;max-height:0;overflow:hidden;border-radius:2px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.08em;text-align:center;transition:max-height .25s,padding .25s,opacity .3s;opacity:0}
-.flash.on{max-height:60px;padding:12px 16px;opacity:1}
-.flash.on.ok{background:#0d2018;border:1px solid #27a35a;color:#6ee89a}
-.flash.on.ko{background:#1a0a0a;border:1px solid var(--wb);color:#e87070}
-
-/* ── Game over screen ── */
-.send{display:none;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:620px;background:var(--surface2);border:1px solid var(--wb);border-radius:2px;padding:28px 24px;text-align:center;animation:fu .5s ease both}
-.send.on{display:flex}
-.se-t{font-family:'Cinzel',serif;font-size:22px;font-weight:900;letter-spacing:.15em;color:#e87070;text-shadow:0 0 20px #ff444466}
-.se-s{font-style:italic;color:var(--text-dim);font-size:14px}
-.sestats{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
-.sestat{display:flex;flex-direction:column;align-items:center;gap:4px}
-.sestat strong{font-family:'Cinzel',serif;font-size:28px;color:var(--accent2)}
-.sestat span{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:.12em}
-.r2btn{background:linear-gradient(135deg,#7a1515,#a02020);border:none;color:#ffcccc;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.12em;padding:10px 24px;cursor:pointer;border-radius:2px;text-transform:uppercase;transition:all .2s}
-.r2btn:hover{background:linear-gradient(135deg,#a02020,#c03030)}
-.xbtn2{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.1em;padding:8px 18px;cursor:pointer;border-radius:2px;text-transform:uppercase;transition:all .2s}
-.xbtn2:hover{border-color:var(--accent);color:var(--accent2)}
-
-.input-area{width:100%;max-width:620px;display:flex;gap:8px}
-.autocomplete-wrap{position:relative;flex:1}
-.guess-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Cinzel',serif;font-size:14px;padding:12px 16px;outline:none;border-radius:2px;letter-spacing:.05em;transition:border-color .2s}
-.guess-input:focus{border-color:var(--accent)}
-.guess-input::placeholder{color:var(--text-dim)}
-.guess-btn{background:linear-gradient(135deg,#a86820,#c8832a);border:none;color:#fff;font-family:'Cinzel',serif;font-size:12px;font-weight:700;padding:12px 18px;cursor:pointer;letter-spacing:.1em;border-radius:2px;transition:all .2s;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
-.guess-btn:hover{background:linear-gradient(135deg,#c8832a,#e8a84a)}
-.guess-btn:disabled{opacity:.4;cursor:not-allowed}
-.autocomplete-list{position:absolute;top:100%;left:0;right:0;background:var(--surface2);border:1px solid var(--border);border-top:none;max-height:220px;overflow-y:auto;z-index:100;border-radius:0 0 2px 2px}
-.autocomplete-list:empty{display:none}
-.autocomplete-item{padding:10px 16px;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;color:var(--text);letter-spacing:.04em;transition:background .15s;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.autocomplete-item:hover,.autocomplete-item.selected{background:var(--surface);color:var(--accent2)}
-.autocomplete-item .gb-tag{font-size:10px;color:var(--text-dim);margin-left:auto;white-space:nowrap}
-
-/* Desktop table */
-.guesses-container{width:100%;overflow-x:auto}
-.guesses-header{display:grid;grid-template-columns:170px repeat(6,1fr);gap:4px;margin-bottom:6px;padding:0 2px}
-.guesses-header div{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;color:var(--text-dim);text-align:center;text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border)}
-.guesses-header div:first-child{text-align:left;padding-left:8px}
-.guess-row{display:grid;grid-template-columns:170px repeat(6,1fr);gap:4px;margin-bottom:4px;animation:si .35s cubic-bezier(.2,.8,.3,1) both}
-@keyframes si{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.guess-cell{background:var(--surface2);border:1px solid var(--border);padding:10px 6px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.04em;border-radius:2px;min-height:46px;display:flex;align-items:center;justify-content:center;line-height:1.3}
-.guess-cell:first-child{text-align:left;justify-content:flex-start;padding-left:10px;font-size:12px}
-.guess-cell.correct{background:var(--correct);border-color:var(--cb);color:#6ee89a}
-.guess-cell.wrong{background:var(--wrong);border-color:var(--wb);color:#e87070}
-.guess-cell.close{background:var(--close);border-color:var(--lb);color:#e8c870}
-.arrow{font-size:9px;opacity:.9;margin-left:2px}
-
-/* Mobile cards */
-.guess-cards{display:none;flex-direction:column;gap:8px;width:100%}
-.guess-card{background:var(--surface2);border:1px solid var(--border);border-radius:4px;overflow:hidden;animation:si .35s cubic-bezier(.2,.8,.3,1) both}
-.guess-card-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface)}
-.card-monster-name{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.06em}
-.card-monster-name.correct{color:#6ee89a}
-.card-monster-name.wrong{color:#e87070}
-.card-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)}
-.card-cell{background:var(--surface2);padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:2px}
-.card-cell.correct{background:var(--correct)}
-.card-cell.wrong{background:var(--wrong)}
-.card-cell.close{background:var(--close)}
-.card-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase;text-align:center}
-.card-value{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.04em;text-align:center;line-height:1.3}
-.card-cell.correct .card-label{color:#4fdf8a88}
-.card-cell.correct .card-value{color:#6ee89a}
-.card-cell.wrong .card-label{color:#e8707088}
-.card-cell.wrong .card-value{color:#e87070}
-.card-cell.close .card-label{color:#e8c87088}
-.card-cell.close .card-value{color:#e8c870}
-.card-arrow{font-size:8px;opacity:.8}
-
-/* Result banner */
-.result-banner{width:100%;max-width:620px;padding:18px 20px;border:1px solid var(--accent);background:var(--surface2);border-radius:2px;text-align:center;display:none;flex-direction:column;gap:10px;animation:fu .5s ease both}
-@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.result-banner.show{display:flex}
-.result-banner.win{border-color:var(--cb);background:#0d2018}
-.result-banner.lose{border-color:var(--wb);background:#1a0a0a}
-.result-title{font-family:'Cinzel',serif;font-size:20px;font-weight:900;letter-spacing:.1em}
-.result-banner.win .result-title{color:#6ee89a}
-.result-banner.lose .result-title{color:#e87070}
-.result-monster{font-family:'Cinzel',serif;font-size:15px;color:var(--accent2)}
-.result-desc{font-style:italic;color:var(--text-dim);font-size:13px;line-height:1.6}
-.next-timer{font-size:13px;color:var(--text-dim);letter-spacing:.08em;font-family:'Cinzel',serif}
-.next-timer span{color:var(--accent2);font-size:15px}
-.attempts-row{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:center}
-.attempt-dot{width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);transition:all .3s}
-.attempt-dot.used{background:var(--accent);border-color:var(--accent2)}
-.attempt-dot.win{background:#27a35a;border-color:#4fdf8a}
-.attempt-dot.lose{background:var(--wb);border-color:#e87070}
-.share-btn,.share-btn2{background:transparent;border:1px solid var(--accent);color:var(--accent2);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.12em;padding:8px 20px;cursor:pointer;transition:all .2s;text-transform:uppercase;border-radius:2px}
-.share-btn:hover,.share-btn2:hover{background:var(--accent);color:#fff}
-.help-toggle{font-family:'Cinzel',serif;font-size:11px;color:var(--text-dim);letter-spacing:.1em;cursor:pointer;text-decoration:underline;text-underline-offset:3px;background:none;border:none;transition:color .2s}
-.help-toggle:hover{color:var(--accent2)}
-.help-panel{max-width:620px;width:100%;background:var(--surface2);border:1px solid var(--border);padding:14px 16px;border-radius:2px;display:none;flex-direction:column;gap:8px;font-size:13px;line-height:1.7;color:var(--text-dim)}
-.help-panel.open{display:flex}
-.help-panel strong{color:var(--accent2);font-family:'Cinzel',serif;font-size:12px}
-.legend-row{display:flex;gap:10px;align-items:center}
-.lb2{width:18px;height:18px;border-radius:2px;border:1px solid;flex-shrink:0}
-.lb2.g{background:var(--correct);border-color:var(--cb)}
-.lb2.y{background:var(--close);border-color:var(--lb)}
-.lb2.r{background:var(--wrong);border-color:var(--wb)}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-
-body.survival-mode .guess-btn{background:linear-gradient(135deg,#7a1515,#a02020)}
-body.survival-mode .guess-btn:hover{background:linear-gradient(135deg,#a02020,#c03030)}
-
-@media(max-width:600px){
-  .guesses-container{display:none}
-  .guess-cards{display:flex}
-  h1{font-size:20px}
-  .logo-icon{font-size:26px}
-  header{padding:18px 16px 10px}
-  main{gap:12px;padding:0 10px 32px}
-  .guess-input{font-size:13px;padding:11px 14px}
-  .guess-btn{font-size:11px;padding:11px 14px;letter-spacing:.06em}
-}
-@media(min-width:601px) and (max-width:800px){
-  .guesses-header{grid-template-columns:130px repeat(6,1fr)}
-  .guess-row{grid-template-columns:130px repeat(6,1fr)}
-  .guess-cell{font-size:9px;padding:8px 3px;min-height:42px}
-  .guess-cell:first-child{font-size:10px}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Guessr</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <div class="logo-row">
-    <div class="logo-icon">🐉</div>
-    <h1>MONSTER GUESSER</h1>
-    <div class="logo-icon">⚔️</div>
-  </div>
-  <div class="subtitle">Monster Hunter · Édition Quotidienne</div>
-  <div class="divider"></div>
-</header>
-<main>
 
-  <!-- Mode switcher -->
-  <div class="mode-sw">
-    <button class="mbtn active" id="btnD" onclick="switchMode('daily')">⚔ Quotidien</button>
-    <button class="mbtn surv"   id="btnS" onclick="switchMode('survival')">💀 Survie</button>
-  </div>
+    <header>
+        <div class="header-top">
+            <div class="logo-row">
+                <span class="logo-icon">🐉</span>
+                <h1>MONSTER GUESSR</h1>
+            </div>
+            <button id="theme-toggle" aria-label="Changer de thème">
+                <span class="t-icon">☀</span><span class="t-label">Thème</span>
+            </button>
+        </div>
+        <div class="subtitle">Chassez le monstre mystère</div>
+        <div class="divider"></div>
+    </header>
 
-  <!-- Daily bar -->
-  <div class="timer-bar" id="dbar">
-    <span id="gcl">0/8</span>
-    <div class="attempts-row" id="dots"></div>
-    <button class="help-toggle" onclick="toggleHelp()">? COMMENT JOUER</button>
-  </div>
+    <main>
+        <!-- Sélecteur de mode de jeu -->
+        <div class="mode-sw">
+            <button class="mbtn active" id="btn-daily">Quotidien</button>
+            <button class="mbtn surv" id="btn-surv">Survie</button>
+        </div>
 
-  <!-- Survival bar -->
-  <div class="surv-bar" id="sbar">
-    <div class="sv"><div class="sv-n" id="sstreak">0</div><div class="sv-l">🔥 Série</div></div>
-    <div class="svdiv"></div>
-    <div class="sdots-w"><div class="sdots" id="sdots"></div><div class="sv-l">Essais</div></div>
-    <div class="svdiv"></div>
-    <div class="sv"><div class="sv-n" id="sbest">0</div><div class="sv-l">🏆 Record</div></div>
-    <button class="help-toggle" onclick="toggleHelp()">? RÈGLES</button>
-  </div>
+        <!-- Compteur quotidien -->
+        <div class="timer-bar" id="daily-timer-bar">
+            Prochain monstre dans : <span id="global-timer">00:00:00</span>
+        </div>
 
-  <!-- Help panel -->
-  <div class="help-panel" id="helpPanel">
-    <strong id="htitle">RÈGLES — QUOTIDIEN</strong>
-    <div id="hd">Devinez le monstre Monster Hunter du jour en max <strong>8 essais</strong>.</div>
-    <div id="hs" style="display:none">Monstres aléatoires à la chaîne — <strong>8 essais par monstre</strong>.<br>Raté → <strong>☠ Game Over !</strong></div>
-    <div class="legend-row"><div class="lb2 g"></div><span>Correct — même valeur que la cible</span></div>
-    <div class="legend-row"><div class="lb2 y"></div><span>Proche — valeur numériquement adjacente (gén / taille / danger)</span></div>
-    <div class="legend-row"><div class="lb2 r"></div><span>Incorrect — valeur différente</span></div>
-    <strong>COLONNES :</strong> Classe · Génération · Élément · Taille · Habitat · Dangerosité<br>
-    Les flèches ▲▼ indiquent si la cible est plus haute ou plus basse.
-  </div>
+        <!-- Barre de statistiques en Mode Survie -->
+        <div class="surv-bar" id="survival-status-bar">
+            <div class="sv">
+                <span class="sv-n" id="surv-score">0</span>
+                <span class="sv-l">Score</span>
+            </div>
+            <div class="svdiv"></div>
+            <div class="sv">
+                <span class="sv-n" id="surv-best">0</span>
+                <span class="sv-l">Meilleur</span>
+            </div>
+            <div class="svdiv"></div>
+            <div class="sdots-w">
+                <span class="sv-l">Vies</span>
+                <div class="sdots" id="surv-lives-container">
+                    <!-- Généré dynamiquement -->
+                </div>
+            </div>
+        </div>
 
-  <!-- Flash message -->
-  <div class="flash" id="flash"></div>
+        <!-- Panneau d'aide contextuelle -->
+        <button class="help-toggle" id="help-btn">Comment jouer ?</button>
+        <div class="help-panel" id="help-content">
+            <p>Devinez le monstre de l'univers <strong>Monster Hunter</strong> caché en un minimum de tentatives.</p>
+            <p>À chaque essai, la couleur des cellules vous guide :</p>
+            <div class="legend-row"><div class="lb2 g"></div> <span>Correspondance parfaite</span></div>
+            <div class="legend-row"><div class="lb2 y"></div> <span>Partiellement correct ou proche (ex: même biome partagé, valeur proche)</span></div>
+            <div class="legend-row"><div class="lb2 r"></div> <span>Aucune correspondance</span></div>
+            <p>Les flèches <span class="arrow">▲</span> ou <span class="arrow">▼</span> indiquent si la valeur recherchée est plus haute ou plus basse.</p>
+        </div>
 
-  <div class="input-area">
-    <div class="autocomplete-wrap">
-      <input class="guess-input" id="gi" type="text" placeholder="Entrez un monstre..." autocomplete="off" oninput="onInput()" onkeydown="onKD(event)"/>
-      <div class="autocomplete-list" id="al"></div>
-    </div>
-    <button class="guess-btn" id="gb" onclick="submit()">DEVINER</button>
-  </div>
+        <!-- Bandeau Flash (Erreurs / Succès rapides) -->
+        <div class="flash" id="flash-msg"></div>
 
-  <!-- Desktop table -->
-  <div class="guesses-container">
-    <div class="guesses-header">
-      <div>MONSTRE</div><div>CLASSE</div><div>GÉN.</div><div>ÉLÉMENT</div><div>TAILLE</div><div>HABITAT</div><div>DANGER</div>
-    </div>
-    <div id="gr"></div>
-  </div>
+        <!-- Zone d'écriture et autocomplétion -->
+        <div class="input-area">
+            <div class="autocomplete-wrap">
+                <input type="text" id="guess-input" class="guess-input" placeholder="Entrez le nom d'un monstre..." autocomplete="off">
+                <div id="autocomplete-list" class="autocomplete-list"></div>
+            </div>
+            <button id="guess-btn" class="guess-btn">Chasser</button>
+        </div>
 
-  <!-- Mobile cards -->
-  <div class="guess-cards" id="gc"></div>
+        <!-- Écran Game Over (Spécifique fin de partie) -->
+        <div class="send" id="game-over-screen">
+            <div class="se-t" id="go-title">FIN DE CHASSE</div>
+            <div class="se-s" id="go-message">Le monstre a pris la fuite...</div>
+            <div class="sestats">
+                <div class="sestat"><strong id="stat-streak">0</strong><span>SÉRIE ACTUELLE</span></div>
+                <div class="sestat"><strong id="stat-guesses">0</strong><span>ESSAIS TOTAL</span></div>
+            </div>
+            <button class="r2btn" id="retry-btn">Nouvelle Traque</button>
+        </div>
 
-  <!-- Result banner (daily) -->
-  <div class="result-banner" id="rb">
-    <div class="result-title" id="rt"></div>
-    <div class="result-monster" id="rm"></div>
-    <div class="result-desc" id="rd"></div>
-    <button class="share-btn" onclick="share()">📋 COPIER LE RÉSULTAT</button>
-    <div class="next-timer">Prochain monstre dans : <span id="nt">--:--:--</span></div>
-  </div>
+        <!-- Bannière de résultat principal -->
+        <div class="result-banner" id="result-banner">
+            <div class="result-title" id="res-title">VICTOIRE !</div>
+            <div class="result-monster" id="res-monster">Rathalos</div>
+            <div class="result-desc" id="res-desc">Un magnifique spécimen terrassé avec succès.</div>
+            
+            <div class="attempts-row" id="attempts-dots-row">
+                <!-- Les petites billes de tentatives s'affichent ici -->
+            </div>
 
-  <!-- Game over screen (survival) -->
-  <div class="send" id="send">
-    <div class="se-t">☠ CHASSE TERMINÉE ☠</div>
-    <div class="se-s" id="sedesc"></div>
-    <div class="sestats">
-      <div class="sestat"><strong id="sek">0</strong><span>TUÉS</span></div>
-      <div class="sestat"><strong id="seb">0</strong><span>MEILL. SÉRIE</span></div>
-      <div class="sestat"><strong id="ser">0</strong><span>RECORD</span></div>
-    </div>
-    <button class="r2btn" onclick="sRestart()">🔁 NOUVELLE CHASSE</button>
-    <button class="xbtn2" onclick="sShare()">📋 COPIER LE SCORE</button>
-  </div>
+            <div class="next-timer" id="res-timer-container">
+                Prochaine cible dans : <span id="res-timer">00:00:00</span>
+            </div>
+            <div style="margin-top: 10px;">
+                <button class="share-btn" id="share-btn">Partager le rapport ⚔</button>
+            </div>
+        </div>
 
-</main>
+        <!-- Affichage ordinateur (Tableau de scores) -->
+        <div class="guesses-container">
+            <div class="guesses-header" id="table-header">
+                <div style="text-align: left; padding-left: 8px;">MONSTRE</div>
+                <div>CLASSE</div>
+                <div>GÉN.</div>
+                <div>ÉLÉMENT</div>
+                <div>TAILLE</div>
+                <div>HABITAT</div>
+                <div>DANGER</div>
+            </div>
+            <div id="desktop-rows-container"></div>
+        </div>
 
-<script>
-const M=[
-  {n:"Rathalos",c:"Flying Wyvern",g:1,e:"Fire",s:3,h:"Forest",d:4},
-  {n:"Rathian",c:"Flying Wyvern",g:1,e:"Poison",s:3,h:"Forest",d:3},
-  {n:"Diablos",c:"Flying Wyvern",g:1,e:"None",s:3,h:"Desert",d:4},
-  {n:"Fatalis",c:"Elder Dragon",g:1,e:"Dragon",s:3,h:"Ruins",d:5},
-  {n:"Kirin",c:"Elder Dragon",g:1,e:"Thunder",s:2,h:"Mountain",d:4},
-  {n:"Monoblos",c:"Flying Wyvern",g:1,e:"None",s:3,h:"Desert",d:3},
-  {n:"Gravios",c:"Flying Wyvern",g:1,e:"Fire",s:3,h:"Volcanic",d:3},
-  {n:"Gypceros",c:"Bird Wyvern",g:1,e:"None",s:2,h:"Forest",d:2},
-  {n:"Khezu",c:"Flying Wyvern",g:1,e:"Thunder",s:3,h:"Cave",d:3},
-  {n:"Yian Kut-Ku",c:"Bird Wyvern",g:1,e:"Fire",s:2,h:"Forest",d:2},
-  {n:"Plesioth",c:"Piscine Wyvern",g:1,e:"Water",s:3,h:"Desert",d:3},
-  {n:"Cephadrome",c:"Piscine Wyvern",g:1,e:"None",s:2,h:"Desert",d:2},
-  {n:"Lao-Shan Lung",c:"Elder Dragon",g:1,e:"Fire",s:4,h:"Mountain",d:5},
-  {n:"Crimson Fatalis",c:"Elder Dragon",g:1,e:"Fire",s:3,h:"Volcanic",d:5},
-  {n:"Yian Garuga",c:"Bird Wyvern",g:1,e:"Poison",s:3,h:"Forest",d:4},
-  {n:"Basarios",c:"Flying Wyvern",g:1,e:"Fire",s:2,h:"Volcanic",d:2},
-  {n:"Rajang",c:"Fanged Beast",g:2,e:"Thunder",s:3,h:"Mountain",d:5},
-  {n:"Chameleos",c:"Elder Dragon",g:2,e:"Poison",s:3,h:"Swamp",d:5},
-  {n:"Kushala Daora",c:"Elder Dragon",g:2,e:"None",s:3,h:"Mountain",d:5},
-  {n:"Teostra",c:"Elder Dragon",g:2,e:"Fire",s:3,h:"Desert",d:5},
-  {n:"Lunastra",c:"Elder Dragon",g:2,e:"Fire",s:3,h:"Desert",d:5},
-  {n:"Daimyo Hermitaur",c:"Carapaceon",g:2,e:"Water",s:2,h:"Swamp",d:3},
-  {n:"Shogun Ceanataur",c:"Carapaceon",g:2,e:"Water",s:2,h:"Swamp",d:3},
-  {n:"Congalala",c:"Fanged Beast",g:2,e:"None",s:2,h:"Forest",d:2},
-  {n:"Blangonga",c:"Fanged Beast",g:2,e:"None",s:2,h:"Tundra",d:3},
-  {n:"Tigrex",c:"Flying Wyvern",g:2,e:"None",s:3,h:"Mountain",d:4},
-  {n:"Akantor",c:"Flying Wyvern",g:2,e:"None",s:3,h:"Volcanic",d:5},
-  {n:"Ukanlos",c:"Flying Wyvern",g:2,e:"Ice",s:3,h:"Tundra",d:5},
-  {n:"Nargacuga",c:"Flying Wyvern",g:2,e:"None",s:3,h:"Forest",d:4},
-  {n:"Lavasioth",c:"Piscine Wyvern",g:2,e:"Fire",s:3,h:"Volcanic",d:3},
-  {n:"Hypnocatrice",c:"Bird Wyvern",g:2,e:"Sleep",s:2,h:"Desert",d:3},
-  {n:"Yama Tsukami",c:"Elder Dragon",g:2,e:"None",s:4,h:"Forest",d:5},
-  {n:"Lagiacrus",c:"Leviathan",g:3,e:"Thunder",s:3,h:"Ocean",d:4},
-  {n:"Royal Ludroth",c:"Leviathan",g:3,e:"Water",s:2,h:"Swamp",d:2},
-  {n:"Barioth",c:"Flying Wyvern",g:3,e:"Ice",s:3,h:"Tundra",d:4},
-  {n:"Barroth",c:"Brute Wyvern",g:3,e:"None",s:3,h:"Desert",d:2},
-  {n:"Deviljho",c:"Brute Wyvern",g:3,e:"Dragon",s:3,h:"Forest",d:5},
-  {n:"Uragaan",c:"Brute Wyvern",g:3,e:"Fire",s:3,h:"Volcanic",d:3},
-  {n:"Zinogre",c:"Fanged Wyvern",g:3,e:"Thunder",s:3,h:"Forest",d:4},
-  {n:"Agnaktor",c:"Leviathan",g:3,e:"Fire",s:3,h:"Volcanic",d:3},
-  {n:"Gobul",c:"Leviathan",g:3,e:"None",s:2,h:"Swamp",d:2},
-  {n:"Gigginox",c:"Flying Wyvern",g:3,e:"Poison",s:2,h:"Cave",d:2},
-  {n:"Alatreon",c:"Elder Dragon",g:3,e:"Dragon",s:3,h:"Volcanic",d:5},
-  {n:"Ceadeus",c:"Elder Dragon",g:3,e:"Water",s:4,h:"Ocean",d:5},
-  {n:"Jhen Mohran",c:"Elder Dragon",g:3,e:"Dragon",s:4,h:"Desert",d:5},
-  {n:"Brachydios",c:"Brute Wyvern",g:3,e:"Blast",s:3,h:"Volcanic",d:4},
-  {n:"Dire Miralis",c:"Elder Dragon",g:3,e:"Fire",s:4,h:"Ocean",d:5},
-  {n:"Duramboros",c:"Brute Wyvern",g:3,e:"None",s:3,h:"Swamp",d:3},
-  {n:"Amatsu",c:"Elder Dragon",g:3,e:"Water",s:4,h:"Mountain",d:5},
-  {n:"Nibelsnarf",c:"Leviathan",g:3,e:"None",s:2,h:"Desert",d:2},
-  {n:"Lagombi",c:"Fanged Beast",g:3,e:"Ice",s:2,h:"Tundra",d:2},
-  {n:"Volvidon",c:"Fanged Beast",g:3,e:"None",s:2,h:"Volcanic",d:2},
-  {n:"Mizutsune",c:"Leviathan",g:4,e:"Water",s:3,h:"Swamp",d:4},
-  {n:"Gore Magala",c:"???",g:4,e:"Dragon",s:3,h:"Ruins",d:5},
-  {n:"Shagaru Magala",c:"Elder Dragon",g:4,e:"Dragon",s:3,h:"Ruins",d:5},
-  {n:"Seregios",c:"Flying Wyvern",g:4,e:"None",s:3,h:"Desert",d:4},
-  {n:"Zamtrios",c:"Amphibian",g:4,e:"Ice",s:2,h:"Tundra",d:3},
-  {n:"Nerscylla",c:"Temnoceran",g:4,e:"Poison",s:2,h:"Cave",d:3},
-  {n:"Seltas Queen",c:"Neopteron",g:4,e:"None",s:2,h:"Desert",d:3},
-  {n:"Tetsucabra",c:"Amphibian",g:4,e:"None",s:2,h:"Swamp",d:2},
-  {n:"Najarala",c:"Snake Wyvern",g:4,e:"None",s:3,h:"Desert",d:3},
-  {n:"Kecha Wacha",c:"Fanged Beast",g:4,e:"Water",s:2,h:"Forest",d:3},
-  {n:"Dalamadur",c:"Elder Dragon",g:4,e:"Poison",s:4,h:"Mountain",d:5},
-  {n:"Gogmazios",c:"Elder Dragon",g:4,e:"Dragon",s:3,h:"Ruins",d:5},
-  {n:"Glavenus",c:"Brute Wyvern",g:4,e:"Fire",s:3,h:"Forest",d:4},
-  {n:"Gammoth",c:"Fanged Beast",g:4,e:"Ice",s:3,h:"Tundra",d:4},
-  {n:"Astalos",c:"Flying Wyvern",g:4,e:"Thunder",s:3,h:"Forest",d:4},
-  {n:"Nakarkos",c:"Elder Dragon",g:4,e:"None",s:4,h:"Cave",d:5},
-  {n:"Valstrax",c:"Elder Dragon",g:4,e:"Dragon",s:3,h:"Mountain",d:5},
-  {n:"Malfestio",c:"Bird Wyvern",g:4,e:"None",s:2,h:"Forest",d:3},
-  {n:"Nergigante",c:"Elder Dragon",g:5,e:"Dragon",s:3,h:"Mountain",d:5},
-  {n:"Vaal Hazak",c:"Elder Dragon",g:5,e:"Dragon",s:3,h:"Ruins",d:5},
-  {n:"Kulve Taroth",c:"Elder Dragon",g:5,e:"Fire",s:4,h:"Volcanic",d:5},
-  {n:"Xeno'jiiva",c:"Elder Dragon",g:5,e:"Dragon",s:4,h:"Cave",d:5},
-  {n:"Anjanath",c:"Brute Wyvern",g:5,e:"Fire",s:3,h:"Forest",d:3},
-  {n:"Odogaron",c:"Fanged Wyvern",g:5,e:"None",s:2,h:"Ruins",d:4},
-  {n:"Legiana",c:"Flying Wyvern",g:5,e:"Ice",s:3,h:"Mountain",d:3},
-  {n:"Tobi-Kadachi",c:"Fanged Wyvern",g:5,e:"Thunder",s:2,h:"Forest",d:2},
-  {n:"Pukei-Pukei",c:"Bird Wyvern",g:5,e:"Poison",s:2,h:"Forest",d:2},
-  {n:"Bazelgeuse",c:"Flying Wyvern",g:5,e:"Blast",s:3,h:"Forest",d:4},
-  {n:"Paolumu",c:"Flying Wyvern",g:5,e:"None",s:2,h:"Mountain",d:2},
-  {n:"Radobaan",c:"Brute Wyvern",g:5,e:"None",s:3,h:"Ruins",d:2},
-  {n:"Jyuratodus",c:"Piscine Wyvern",g:5,e:"Water",s:2,h:"Swamp",d:2},
-  {n:"Tzitzi-Ya-Ku",c:"Bird Wyvern",g:5,e:"None",s:2,h:"Swamp",d:2},
-  {n:"Kulu-Ya-Ku",c:"Bird Wyvern",g:5,e:"None",s:2,h:"Desert",d:1},
-  {n:"Dodogama",c:"Fanged Wyvern",g:5,e:"Fire",s:2,h:"Volcanic",d:2},
-  {n:"Velkhana",c:"Elder Dragon",g:5,e:"Ice",s:3,h:"Tundra",d:5},
-  {n:"Namielle",c:"Elder Dragon",g:5,e:"Water",s:3,h:"Ocean",d:5},
-  {n:"Safi'jiiva",c:"Elder Dragon",g:5,e:"Dragon",s:4,h:"Cave",d:5},
-  {n:"Shara Ishvalda",c:"Elder Dragon",g:5,e:"None",s:3,h:"Ruins",d:5},
-  {n:"Acidic Glavenus",c:"Brute Wyvern",g:5,e:"Dragon",s:3,h:"Forest",d:4},
-  {n:"Banbaro",c:"Brute Wyvern",g:5,e:"Ice",s:3,h:"Tundra",d:3},
-  {n:"Beotodus",c:"Piscine Wyvern",g:5,e:"Ice",s:2,h:"Tundra",d:2},
-  {n:"Fulgur Anjanath",c:"Brute Wyvern",g:5,e:"Thunder",s:3,h:"Forest",d:4},
-  {n:"Magnamalo",c:"Fanged Wyvern",g:6,e:"Poison",s:3,h:"Mountain",d:5},
-  {n:"Almudron",c:"Leviathan",g:6,e:"Water",s:3,h:"Swamp",d:3},
-  {n:"Bishaten",c:"Fanged Beast",g:6,e:"None",s:2,h:"Forest",d:3},
-  {n:"Aknosom",c:"Bird Wyvern",g:6,e:"Fire",s:3,h:"Desert",d:3},
-  {n:"Somnacanth",c:"Leviathan",g:6,e:"Sleep",s:3,h:"Ocean",d:4},
-  {n:"Tetranadon",c:"Amphibian",g:6,e:"Water",s:2,h:"Swamp",d:2},
-  {n:"Rakna-Kadaki",c:"Temnoceran",g:6,e:"Fire",s:3,h:"Volcanic",d:4},
-  {n:"Goss Harag",c:"Fanged Beast",g:6,e:"Ice",s:3,h:"Tundra",d:4},
-  {n:"Ibushi",c:"Elder Dragon",g:6,e:"None",s:3,h:"Mountain",d:5},
-  {n:"Narwa",c:"Elder Dragon",g:6,e:"Thunder",s:3,h:"Mountain",d:5},
-  {n:"Malzeno",c:"Elder Dragon",g:6,e:"Dragon",s:3,h:"Ruins",d:5},
-  {n:"Lunagaron",c:"Fanged Wyvern",g:6,e:"Ice",s:3,h:"Tundra",d:4},
-  {n:"Garangolm",c:"Fanged Beast",g:6,e:"Blast",s:3,h:"Forest",d:4},
-  {n:"Espinas",c:"Flying Wyvern",g:5,e:"Poison",s:3,h:"Forest",d:4},
-  {n:"Gaismagorm",c:"Elder Dragon",g:6,e:"None",s:4,h:"Cave",d:5},
-  {n:"Arkveld",c:"Flying Wyvern",g:6,e:"Dragon",s:3,h:"Ruins",d:5},
-  {n:"Doshaguma",c:"Fanged Beast",g:6,e:"None",s:3,h:"Forest",d:4},
-  {n:"Rey Dau",c:"Flying Wyvern",g:6,e:"Thunder",s:3,h:"Desert",d:4},
-  {n:"Jin Dahaad",c:"Leviathan",g:6,e:"Ice",s:3,h:"Mountain",d:4},
-  {n:"Uth Duna",c:"Leviathan",g:6,e:"Water",s:3,h:"Ocean",d:4},
-  {n:"Rompopolo",c:"Brute Wyvern",g:6,e:"Poison",s:3,h:"Swamp",d:4},
-  {n:"Quematrice",c:"Brute Wyvern",g:6,e:"Fire",s:3,h:"Volcanic",d:4},
-  {n:"Nu Udra",c:"Cephalopod",g:6,e:"Fire",s:4,h:"Ocean",d:5},
-  {n:"Xu Wu",c:"Cephalopod",g:6,e:"None",s:3,h:"Forest",d:4},
-  {n:"Zoh Shia",c:"Elder Dragon",g:6,e:"None",s:4,h:"Ruins",d:5},
-  {n:"Chatacabra",c:"Amphibian",g:6,e:"None",s:2,h:"Desert",d:2},
-  {n:"Balahara",c:"Leviathan",g:6,e:"Water",s:2,h:"Desert",d:2},
-  {n:"Hirabami",c:"Leviathan",g:6,e:"Thunder",s:2,h:"Mountain",d:3},
-  {n:"Lala Barina",c:"Temnoceran",g:6,e:"Poison",s:2,h:"Forest",d:3},
-  {n:"Ajarakan",c:"Fanged Beast",g:6,e:"Fire",s:3,h:"Volcanic",d:4},
-];
-const SL=["","Small","Medium","Large","Giant"];
-const COLS=[
-  {key:'c',label:'CLASSE'},
-  {key:'g',label:'GÉN.'},
-  {key:'e',label:'ÉLÉMENT'},
-  {key:'s',label:'TAILLE'},
-  {key:'h',label:'HABITAT'},
-  {key:'d',label:'DANGER'},
-];
-const MAX=8;
-const $=id=>document.getElementById(id);
+        <!-- Affichage mobile (Cards empilées) -->
+        <div class="guess-cards" id="mobile-cards-container"></div>
+    </main>
 
-/* ══ Helpers ══ */
-function seededShuffle(arr,seed){const a=arr.slice();let s=seed>>>0;for(let i=a.length-1;i>0;i--){s=(Math.imul(s,1664525)+1013904223)>>>0;const j=s%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
-function getDayNumber(){const start=new Date('2025-01-01T00:00:00');const today=new Date();today.setHours(0,0,0,0);return Math.floor((today-start)/86400000);}
-function getTodayMonster(){const day=getDayNumber();return seededShuffle(M,day^0xC0FFEE)[day%M.length];}
-function todayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
-function rndQ(){const a=M.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-
-function cmp(m,tgt){
-  const gd=Math.abs(m.g-tgt.g),sd=Math.abs(m.s-tgt.s),dd=Math.abs(m.d-tgt.d);
-  return[
-    {v:m.c,st:m.c===tgt.c?'correct':'wrong',a:''},
-    {v:'G'+m.g,st:m.g===tgt.g?'correct':gd===1?'close':'wrong',a:m.g<tgt.g?'▲':m.g>tgt.g?'▼':''},
-    {v:m.e,st:m.e===tgt.e?'correct':'wrong',a:''},
-    {v:SL[m.s],st:m.s===tgt.s?'correct':sd===1?'close':'wrong',a:m.s<tgt.s?'▲':m.s>tgt.s?'▼':''},
-    {v:m.h,st:m.h===tgt.h?'correct':'wrong',a:''},
-    {v:'★'.repeat(m.d)+'☆'.repeat(5-m.d),st:m.d===tgt.d?'correct':dd===1?'close':'wrong',a:m.d<tgt.d?'▲':m.d>tgt.d?'▼':''},
-  ];
-}
-
-function mkRow(m,f,tgt){
-  const row=document.createElement('div');row.className='guess-row';
-  const nc=document.createElement('div');nc.className='guess-cell '+(m.n===tgt.n?'correct':'wrong');nc.textContent=m.n;row.appendChild(nc);
-  f.forEach(x=>{const c=document.createElement('div');c.className='guess-cell '+x.st;c.innerHTML=x.v+(x.a?'<span class="arrow"> '+x.a+'</span>':'');row.appendChild(c);});
-  $('gr').prepend(row);
-}
-function mkCard(m,f,tgt){
-  const isWin=m.n===tgt.n;
-  const card=document.createElement('div');card.className='guess-card';
-  const hdr=document.createElement('div');hdr.className='guess-card-header';
-  const nm=document.createElement('div');nm.className='card-monster-name '+(isWin?'correct':'wrong');nm.textContent=m.n;
-  const badge=document.createElement('div');badge.style.cssText='font-family:Cinzel,serif;font-size:10px;color:var(--text-dim);letter-spacing:.05em';badge.textContent='G'+m.g+' · '+m.c;
-  hdr.appendChild(nm);hdr.appendChild(badge);card.appendChild(hdr);
-  const grid=document.createElement('div');grid.className='card-grid';
-  COLS.forEach((col,i)=>{
-    const x=f[i];
-    const cell=document.createElement('div');cell.className='card-cell '+x.st;
-    const lbl=document.createElement('div');lbl.className='card-label';lbl.textContent=col.label;
-    const val=document.createElement('div');val.className='card-value';
-    val.innerHTML=x.v+(x.a?'<span class="card-arrow"> '+x.a+'</span>':'');
-    cell.appendChild(lbl);cell.appendChild(val);grid.appendChild(cell);
-  });
-  card.appendChild(grid);$('gc').prepend(card);
-}
-function clr(){$('gr').innerHTML='';$('gc').innerHTML='';}
-
-/* ══ State ══ */
-let mode='daily';
-let tgt=getTodayMonster(),dG=[],dOver=false,dSel=-1;
-let sStr=0,sBst=0,sKil=0,sRec=0;
-let sQ=[],sQi=0,sCur=null,sG=[],sSel=-1,sOver=false;
-
-/* ══ Mode switch ══ */
-function switchMode(m){
-  mode=m;
-  $('btnD').classList.toggle('active',m==='daily');
-  $('btnS').classList.toggle('active',m==='survival');
-  $('dbar').style.display=m==='daily'?'flex':'none';
-  $('sbar').classList.toggle('on',m==='survival');
-  $('htitle').textContent=m==='daily'?'RÈGLES — QUOTIDIEN':'RÈGLES — SURVIE';
-  $('hd').style.display=m==='daily'?'':'none';
-  $('hs').style.display=m==='survival'?'':'none';
-  $('flash').classList.remove('on');
-  document.body.classList.toggle('survival-mode',m==='survival');
-  if(m==='daily'){
-    $('send').classList.remove('on');clr();
-    dG.forEach(x=>{mkRow(x.m,x.f,tgt);mkCard(x.m,x.f,tgt);});
-    updDots();
-    if(dOver) showDRes(dG.some(x=>x.m.n===tgt.n));
-    else $('rb').classList.remove('on');
-    $('gi').disabled=dOver;$('gb').disabled=dOver;
-    if(!dOver) foc();
-  } else {
-    $('rb').classList.remove('on');
-    if(sOver){clr();showSEnd();}
-    else{
-      clr();
-      if(!sCur) sInit();
-      else sG.forEach(x=>{mkRow(x.m,x.f,sCur);mkCard(x.m,x.f,sCur);});
-      updSUI();$('gi').disabled=false;$('gb').disabled=false;foc();
-    }
-  }
-}
-function foc(){setTimeout(()=>$('gi').focus(),60);}
-
-/* ══ Daily ══ */
-function saveD(won){try{localStorage.setItem('mhg25v2',JSON.stringify({date:todayStr(),guesses:dG.map(x=>({n:x.m.n})),over:dOver,won}));}catch(e){}}
-function loadD(){
-  try{
-    const s=JSON.parse(localStorage.getItem('mhg25v2'));
-    if(!s||s.date!==todayStr())return;
-    for(const sv of (s.guesses||[])){const fr=M.find(x=>x.n===sv.n);if(!fr)continue;dG.push({m:fr,f:cmp(fr,tgt)});}
-    dOver=s.over||false;
-    if(mode==='daily'){dG.forEach(x=>{mkRow(x.m,x.f,tgt);mkCard(x.m,x.f,tgt);});updDots();if(dOver)showDRes(s.won);}
-  }catch(e){}
-}
-function updDots(){
-  const r=$('dots');r.innerHTML='';
-  for(let i=0;i<MAX;i++){
-    const d=document.createElement('div');d.className='attempt-dot';
-    if(i<dG.length){const w=dG[i].m.n===tgt.n;d.classList.add(w?'win':(dOver&&i===dG.length-1?'lose':'used'));}
-    r.appendChild(d);
-  }
-  $('gcl').innerHTML='<span>'+dG.length+'/'+MAX+'</span>';
-}
-function showDRes(won){
-  const b=$('rb');b.classList.add('show',won?'win':'lose');
-  $('rt').textContent=won?'⚔ PROIE ABATTUE ⚔':'💀 CHASSE ÉCHOUÉE';
-  $('rm').textContent='Le monstre était : '+tgt.n;
-  $('rd').textContent=won?'Bravo ! '+tgt.n+' identifié en '+dG.length+' essai'+(dG.length>1?'s':'')+'.'
-    :tgt.n+' | '+tgt.c+' | Gén.'+tgt.g+' | '+tgt.e+' | Danger: '+'★'.repeat(tgt.d);
-  $('gi').disabled=true;$('gb').disabled=true;
-  tick();setInterval(tick,1000);
-}
-function tick(){
-  const now=new Date(),tom=new Date(now);tom.setDate(tom.getDate()+1);tom.setHours(0,0,0,0);
-  const diff=tom-now;
-  $('nt').textContent=String(Math.floor(diff/3600000)).padStart(2,'0')+':'+String(Math.floor((diff%3600000)/60000)).padStart(2,'0')+':'+String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-}
-function share(){
-  let t='Monster Guessr '+todayStr()+'\n'+dG.length+'/'+MAX+' essais\n\n';
-  dG.forEach(x=>{const w=x.m.n===tgt.n;t+=x.f.map(f=>f.st==='correct'?'🟩':f.st==='close'?'🟨':'🟥').join('')+(w?' ⚔':'')+'\n';});
-  t+='\nhttps://VOTRE-USERNAME.github.io/monster-guessr';
-  try{navigator.clipboard.writeText(t);}catch(e){}
-  const b=document.querySelector('.share-btn');b.textContent='✓ COPIÉ !';setTimeout(()=>b.textContent='📋 COPIER LE RÉSULTAT',2000);
-}
-
-/* ══ Survival ══ */
-function loadRec(){try{const s=JSON.parse(localStorage.getItem('mhg_surv'));if(s)sRec=s.best||0;}catch(e){}}
-function saveRec(){try{localStorage.setItem('mhg_surv',JSON.stringify({best:sRec}));}catch(e){}}
-function sInit(){sStr=0;sBst=0;sKil=0;sQ=rndQ();sQi=0;sOver=false;$('send').classList.remove('on');sNext();}
-function sNext(){if(sQi>=sQ.length){sQ=rndQ();sQi=0;}sCur=sQ[sQi++];sG=[];clr();$('flash').classList.remove('on');$('gi').disabled=false;$('gb').disabled=false;foc();updSUI();}
-function updSUI(){
-  $('sstreak').textContent=sStr;$('sbest').textContent=sRec;
-  const el=$('sdots');el.innerHTML='';
-  for(let i=0;i<MAX;i++){const d=document.createElement('div');d.className='sdot';if(i<sG.length)d.classList.add(sG[i]&&sG[i].m.n===sCur.n?'win':'used');el.appendChild(d);}
-}
-function showFlash(type,msg){
-  const f=$('flash');f.className='flash on '+(type==='ok'?'ok':'ko');f.textContent=msg;
-  clearTimeout(f._t);f._t=setTimeout(()=>f.classList.remove('on'),2500);
-}
-function sGameOver(name){
-  sOver=true;if(sStr>sRec){sRec=sStr;saveRec();}
-  showFlash('ko','☠ '+name+' — Game Over !');
-  $('gi').disabled=true;$('gb').disabled=true;
-  setTimeout(()=>showSEnd(),1500);
-}
-function sCorrect(){
-  sKil++;sStr++;if(sStr>sBst)sBst=sStr;if(sStr>sRec){sRec=sStr;saveRec();}
-  showFlash('ok','⚔ '+sCur.n+' abattu'+(sStr>=3?' 🔥 ×'+sStr:'!'));
-  $('gi').disabled=true;$('gb').disabled=true;updSUI();
-  setTimeout(()=>sNext(),1900);
-}
-function showSEnd(){
-  clr();$('send').classList.add('on');
-  $('sedesc').innerHTML='Série de <em>'+sStr+'</em> — '+sKil+' monstre'+(sKil>1?'s':'')+' tué'+(sKil>1?'s':'')+'.';
-  $('sek').textContent=sKil;$('seb').textContent=sBst;$('ser').textContent=sRec;
-  $('gi').disabled=true;$('gb').disabled=true;updSUI();
-}
-function sRestart(){sInit();}
-function sShare(){
-  const t='Monster Guessr — Survie\nSérie : '+sStr+'\nTués : '+sKil+'\nRecord : '+sRec+'\n\nhttps://VOTRE-USERNAME.github.io/monster-guessr';
-  try{navigator.clipboard.writeText(t);}catch(e){}
-  const b=document.querySelector('.xbtn2');b.textContent='✓ COPIÉ !';setTimeout(()=>b.textContent='📋 COPIER LE SCORE',2000);
-}
-
-/* ══ Submit ══ */
-function submit(){mode==='daily'?subD():subS();}
-function subD(){
-  if(dOver)return;
-  const inp=$('gi');const v=inp.value.trim();if(!v)return;
-  const m=M.find(x=>x.n.toLowerCase()===v.toLowerCase());
-  if(!m){shake(inp,'Monstre introuvable...');return;}
-  if(dG.find(x=>x.m.n===m.n)){shake(inp,'Déjà essayé !');return;}
-  const f=cmp(m,tgt);dG.push({m,f});
-  mkRow(m,f,tgt);mkCard(m,f,tgt);updDots();
-  inp.value='';$('al').innerHTML='';
-  const won=m.n===tgt.n;
-  if(won||dG.length>=MAX){dOver=true;saveD(won);setTimeout(()=>showDRes(won),400);}else saveD(false);
-}
-function subS(){
-  if(sOver||!sCur)return;
-  const inp=$('gi');const v=inp.value.trim();if(!v)return;
-  const m=M.find(x=>x.n.toLowerCase()===v.toLowerCase());
-  if(!m){shake(inp,'Monstre introuvable...');return;}
-  if(sG.find(x=>x.m.n===m.n)){shake(inp,'Déjà essayé !');return;}
-  const f=cmp(m,sCur);sG.push({m,f});
-  mkRow(m,f,sCur);mkCard(m,f,sCur);
-  inp.value='';$('al').innerHTML='';updSUI();
-  if(m.n===sCur.n)sCorrect();
-  else if(sG.length>=MAX)sGameOver(sCur.n);
-}
-function shake(inp,msg){
-  inp.style.borderColor='#c0392b';inp.placeholder=msg;
-  inp.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}],{duration:240});
-  setTimeout(()=>{inp.style.borderColor='';inp.placeholder='Entrez un monstre...';},1500);
-}
-
-/* ══ Autocomplete ══ */
-function onInput(){
-  const v=$('gi').value.toLowerCase().trim();
-  const l=$('al');l.innerHTML='';
-  if(mode==='daily')dSel=-1;else sSel=-1;
-  if(!v)return;
-  const done=new Set((mode==='daily'?dG:sG).map(x=>x.m.n));
-  M.filter(m=>m.n.toLowerCase().includes(v)&&!done.has(m.n)).slice(0,8).forEach(m=>{
-    const i=document.createElement('div');i.className='autocomplete-item';
-    i.innerHTML=m.n+'<span class="gb-tag">G'+m.g+' · '+m.c+'</span>';
-    i.onclick=()=>{$('gi').value=m.n;l.innerHTML='';submit();};l.appendChild(i);
-  });
-}
-function onKD(e){
-  const l=$('al');const items=l.querySelectorAll('.autocomplete-item');
-  let sel=mode==='daily'?dSel:sSel;
-  if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,items.length-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(items[sel])$('gi').value=items[sel].firstChild.textContent.trim();}
-  else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,-1);items.forEach((x,i)=>x.classList.toggle('selected',i===sel));if(sel>=0&&items[sel])$('gi').value=items[sel].firstChild.textContent.trim();}
-  else if(e.key==='Enter'){e.preventDefault();l.innerHTML='';submit();}
-  else if(e.key==='Escape')l.innerHTML='';
-  if(mode==='daily')dSel=sel;else sSel=sel;
-}
-document.addEventListener('click',e=>{if(!e.target.closest('.autocomplete-wrap'))$('al').innerHTML='';});
-function toggleHelp(){$('helpPanel').classList.toggle('open');}
-
-loadRec();updDots();loadD();if(!dOver)foc();
-</script>
+    <script src="data.js"></script> <!-- Ton tableau M contenant les monstres -->
+    <script src="app.js"></script>  <!-- Script logique ci-dessous -->
 </body>
 </html>
