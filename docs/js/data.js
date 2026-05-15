@@ -303,7 +303,7 @@ const M=[
   {n:"Zoh Shia",c:"Dragon ancien",g:6,e:"Aucun",s:4,h:"Ruines",d:5}, // ~48.5 m
 ];
 
-const SL = ["","Petit","Médium","Large","Géant"];
+const SL = ["","Petit","Moyen","Grand","Géant", "Colossal"];
 const COLS = [
   {key:'c', label:'CLASSE'},
   {key:'g', label:'GÉN.'},
