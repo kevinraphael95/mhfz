@@ -1,4 +1,9 @@
 /*
+SOURCES :
+https://mogapedia.fandom.com/fr/wiki/Monster_Hunter_Wiki
+*/
+
+/*
 CLASSES DE MONSTRES (Mogapedia) :
 - Amphibien (Amphibian)
 - Bête à crocs (Fanged Beast)
@@ -15,6 +20,29 @@ CLASSES DE MONSTRES (Mogapedia) :
 - Wyverne brute (Brute Wyvern)
 - Wyverne serpent (Snake Wyvern)
 - Wyverne volante (Flying Wyvern)
+*/
+
+/*
+STATUTS ET FLÉAUX (Ailments & Blights) :
+- Boue / Neige / Toile (Muddy / Snowy / Webbed)
+- Étourdissement (Stun)
+- Explosion / Poisse (Blast)
+- Fléau-Dragon (Dragonblight)
+- Fléau-Eau (Waterblight)
+- Fléau-Feu (Fireblight)
+- Fléau-Foudre (Thunderblight)
+- Fléau-Glace (Iceblight)
+- Fléau-Poisse (Hellfireblight)
+- Goudron / Suintement (Tarred / Oozing)
+- Laceration / Saignement (Bleeding)
+- Miasme / Effluve (Effluvium)
+- Paralyse (Paralysis)
+- Poison (Poison)
+- Savon (Bubble)
+- Sommeil (Sleep)
+- Somnolence (Drowsy)
+- Vol de défense (Defense Down)
+- Virus de Frénésie (Frenzy Virus)
 */
 
 const M=[
@@ -34,6 +62,7 @@ const M=[
   {n:"Crimson Fatalis",c:"Dragon ancien",g:1,e:"Feu",s:3,h:"Volcan",d:5},
   {n:"Yian Garuga",c:"Wyverne rapace",g:1,e:"Poison",s:3,h:"Forêt",d:4},
   {n:"Basarios",c:"Wyverne volante",g:1,e:"Feu",s:2,h:"Volcan",d:2},
+  
   {n:"Rajang",c:"Bête à crocs",g:2,e:"Foudre",s:3,h:"Montagne",d:5},
   {n:"Chameleos",c:"Dragon ancien",g:2,e:"Poison",s:3,h:"Marais",d:5},
   {n:"Kushala Daora",c:"Dragon ancien",g:2,e:"None",s:3,h:"Montagne",d:5},
@@ -50,6 +79,7 @@ const M=[
   {n:"Lavasioth",c:"Wyverne aquatique",g:2,e:"Feu",s:3,h:"Volcan",d:3},
   {n:"HypnocatrGlace",c:"Wyverne rapace",g:2,e:"Sleep",s:2,h:"Désert",d:3},
   {n:"Yama Tsukami",c:"Dragon ancien",g:2,e:"None",s:4,h:"Forêt",d:5},
+  
   {n:"Lagiacrus",c:"Léviathan",g:3,e:"Foudre",s:3,h:"Océan",d:4},
   {n:"Royal Ludroth",c:"Léviathan",g:3,e:"Eau",s:2,h:"Marais",d:2},
   {n:"Barioth",c:"Wyverne volante",g:3,e:"Glace",s:3,h:"Tundra",d:4},
@@ -70,6 +100,7 @@ const M=[
   {n:"Nibelsnarf",c:"Léviathan",g:3,e:"None",s:2,h:"Désert",d:2},
   {n:"Lagombi",c:"Bête à crocs",g:3,e:"Glace",s:2,h:"Tundra",d:2},
   {n:"Volvidon",c:"Bête à crocs",g:3,e:"None",s:2,h:"Volcan",d:2},
+  
   {n:"Mizutsune",c:"Léviathan",g:4,e:"Eau",s:3,h:"Marais",d:4},
   {n:"Gore Magala",c:"???",g:4,e:"Dragon",s:3,h:"Ruines",d:5},
   {n:"Shagaru Magala",c:"Dragon ancien",g:4,e:"Dragon",s:3,h:"Ruines",d:5},
@@ -88,6 +119,7 @@ const M=[
   {n:"Nakarkos",c:"Dragon ancien",g:4,e:"None",s:4,h:"Cave",d:5},
   {n:"Valstrax",c:"Dragon ancien",g:4,e:"Dragon",s:3,h:"Montagne",d:5},
   {n:"Malfestio",c:"Wyverne rapace",g:4,e:"None",s:2,h:"Forêt",d:3},
+  
   {n:"Nergigante",c:"Dragon ancien",g:5,e:"Dragon",s:3,h:"Montagne",d:5},
   {n:"Vaal Hazak",c:"Dragon ancien",g:5,e:"Dragon",s:3,h:"Ruines",d:5},
   {n:"Kulve Taroth",c:"Dragon ancien",g:5,e:"Feu",s:4,h:"Volcan",d:5},
@@ -113,6 +145,7 @@ const M=[
   {n:"Beotodus",c:"Wyverne aquatique",g:5,e:"Glace",s:2,h:"Tundra",d:2},
   {n:"Fulgur Anjanath",c:"Wyverne brute",g:5,e:"Foudre",s:3,h:"Forêt",d:4},
   {n:"Espinas",c:"Wyverne volante",g:5,e:"Poison",s:3,h:"Forêt",d:4},
+  
   {n:"Magnamalo",c:"Fanged Wyvern",g:6,e:"Poison",s:3,h:"Montagne",d:5},
   {n:"Almudron",c:"Léviathan",g:6,e:"Eau",s:3,h:"Marais",d:3},
   {n:"Bishaten",c:"Bête à crocs",g:6,e:"None",s:2,h:"Forêt",d:3},
