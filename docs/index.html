@@ -25,8 +25,15 @@
     <main>
         <!-- Sélecteur de mode de jeu -->
         <div class="mode-sw">
+            <button class="mbtn help-mbtn" id="btn-help">?</button>
             <button class="mbtn active" id="btn-daily">Quotidien</button>
             <button class="mbtn surv" id="btn-surv">Survie</button>
+            <button class="mbtn besti-mbtn" id="btn-bestiary">Bestiaire</button>
+        </div>
+
+        <!-- Compteur de tentatives (daily uniquement) -->
+        <div class="attempts-counter hidden" id="attempts-counter">
+            Tentatives : <span id="attempts-count">0</span> / 8
         </div>
 
         <!-- Compteur quotidien -->
@@ -52,17 +59,6 @@
                     <!-- Généré dynamiquement -->
                 </div>
             </div>
-        </div>
-
-        <!-- Panneau d'aide contextuelle -->
-        <button class="help-toggle" id="help-btn">Comment jouer ?</button>
-        <div class="help-panel" id="help-content">
-            <p>Devinez le monstre de l'univers <strong>Monster Hunter</strong> caché en un minimum de tentatives.</p>
-            <p>À chaque essai, la couleur des cellules vous guide :</p>
-            <div class="legend-row"><div class="lb2 g"></div> <span>Correspondance parfaite</span></div>
-            <div class="legend-row"><div class="lb2 y"></div> <span>Partiellement correct ou proche (ex: même biome partagé, valeur proche)</span></div>
-            <div class="legend-row"><div class="lb2 r"></div> <span>Aucune correspondance</span></div>
-            <p>Les flèches <span class="arrow">▲</span> ou <span class="arrow">▼</span> indiquent si la valeur recherchée est plus haute ou plus basse.</p>
         </div>
 
         <!-- Bandeau Flash (Erreurs / Succès rapides) -->
@@ -124,7 +120,53 @@
         <div class="guess-cards" id="mobile-cards-container"></div>
     </main>
 
-    <script src="js/data.js"></script> <!-- Ton tableau M contenant les monstres -->
-    <script src="js/app.js"></script>  <!-- Script logique ci-dessous -->
+    <!-- ══════════════════════════════════════
+         MODAL — COMMENT JOUER
+    ══════════════════════════════════════ -->
+    <div class="modal-overlay" id="modal-help">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 class="modal-title">Comment jouer</h2>
+                <button class="modal-close" data-modal="modal-help">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 10px;">Devinez le monstre de l'univers <strong style="color: var(--accent2); font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .08em;">Monster Hunter</strong> caché en un minimum de tentatives.</p>
+                <p style="margin-bottom: 14px;">À chaque essai, la couleur des cellules vous guide :</p>
+                <div class="legend-row"><div class="lb2 g"></div> <span>Correspondance parfaite</span></div>
+                <div class="legend-row"><div class="lb2 y"></div> <span>Partiellement correct ou proche (ex: même biome partagé, valeur proche)</span></div>
+                <div class="legend-row"><div class="lb2 r"></div> <span>Aucune correspondance</span></div>
+                <p style="margin-top: 14px;">Les flèches <span class="arrow">▲</span> ou <span class="arrow">▼</span> indiquent si la valeur recherchée est plus haute ou plus basse.</p>
+                <p style="margin-top: 14px; color: var(--text-dim); font-size: 13px;">En mode <strong style="color: var(--accent2); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .08em;">Quotidien</strong>, vous avez 8 tentatives. Le monstre change chaque jour à minuit.</p>
+                <p style="margin-top: 6px; color: var(--text-dim); font-size: 13px;">En mode <strong style="color: var(--surv-text); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .08em;">Survie</strong>, chaque erreur coûte une vie. Enchaînez les victoires pour maximiser votre score.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         MODAL — BESTIAIRE
+    ══════════════════════════════════════ -->
+    <div class="modal-overlay" id="modal-bestiary">
+        <div class="modal-box modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title">Bestiaire <span id="bestiary-count" style="font-size: 12px; color: var(--text-dim); font-weight: 400; letter-spacing: .05em;"></span></h2>
+                <button class="modal-close" data-modal="modal-bestiary">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="bestiary-filters">
+                    <input type="text" id="bestiary-search" placeholder="Rechercher un monstre..." autocomplete="off">
+                    <select id="bestiary-gen">
+                        <option value="">Toutes les générations</option>
+                    </select>
+                    <select id="bestiary-class">
+                        <option value="">Toutes les classes</option>
+                    </select>
+                </div>
+                <div id="bestiary-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
