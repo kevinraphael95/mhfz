@@ -366,14 +366,14 @@ function flash(msg, type) {
 
 // ── Partage ────────────────────────────────
 function shareResults() {
-    const emojiMap = { correct: '🟩', close: '🟨', wrong: '⬛' };
-    let text = `⚔ Monster Guessr — Quotidien\n📊 ${state.attempts.length}/${MAX}\n\n`;
+    const emojiMap = { correct: '🟩', close: '🟨', wrong: '🟥' };
+    let text = `⚔️ Monster Guessr — Quotidien\n📊 ${state.attempts.length}/${MAX}\n\n`;
     state.attempts.forEach(a => {
         let row = a.n === state.target.n ? '🟩' : '🟥';
         COLS.forEach(col => { row += emojiMap[compare(col.key, a[col.key])]; });
         text += row + '\n';
     });
-    text += '\nJouez vous aussi sur Monster Guessr !';
+    text += `\n🎮 Jouez sur https://kevinraphael95.github.io/mhfz/`;
     navigator.clipboard.writeText(text)
         .then(() => flash("Rapport copié ! 📜", "ok"))
         .catch(() => flash("Échec de la copie.", "ko"));
