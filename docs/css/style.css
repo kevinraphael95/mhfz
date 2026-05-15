@@ -6,20 +6,20 @@
 
 /* ── Thème sombre ── */
 :root, [data-theme="dark"] {
-  --bg:       #1a1508;
-  --surface:  #221c0e;
-  --surface2: #2a2212;
-  --surface3: #332a18;
-  --border:   #4a3c28;
-  --border2:  #5a4a34;
+  --bg:       #2a2210;
+  --surface:  #332a18;
+  --surface2: #3c3120;
+  --surface3: #463a28;
+  --border:   #5a4a32;
+  --border2:  #6a5a40;
 
   --accent:      #d4922e;
   --accent2:     #f0b84e;
   --accent-dim:  #8a5c18;
 
-  --text:        #f2e8d0;
-  --text-sub:    #c8b890;
-  --text-dim:    #9a8a6a;
+  --text:     #fff8e8;
+  --text-sub: #e8d8a8;
+  --text-dim: #c0a870;
 
   --correct-bg:  #0d2818;
   --correct-bd:  #2ea85a;
