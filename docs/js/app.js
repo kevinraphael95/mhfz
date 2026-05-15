@@ -89,6 +89,7 @@ function initGame() {
         targetMonster = M[Math.floor(Math.random() * M.length)];
         document.body.classList.add('survival-mode');
         updateSurvivalUI();
+        updateAttemptsCounter();
     }
 }
 
@@ -167,8 +168,41 @@ function setupEventListeners() {
     document.getElementById('retry-btn').addEventListener('click', () => initGame());
 
     // Toggle de l'aide
-    helpBtn.addEventListener('click', () => {
-        document.getElementById('help-content').classList.toggle('open');
+    // Bouton "?" → modal aide
+    document.getElementById('btn-help').addEventListener('click', () => {
+        document.getElementById('modal-help').classList.add('open');
+    });
+   
+    // Bouton "Bestiaire" → modal bestiaire
+    document.getElementById('btn-bestiary').addEventListener('click', () => {
+        renderBestiary();
+        document.getElementById('modal-bestiary').classList.add('open');
+    });
+   
+    // Fermeture des modals via bouton ✕
+    document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById(btn.dataset.modal).classList.remove('open');
+        });
+    });
+   
+    // Fermeture en cliquant sur l'overlay
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => {
+            if (e.target === overlay) overlay.classList.remove('open');
+        });
+    });
+   
+    // Fermeture via Echap
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+        }
+    });
+   
+    // Filtres du bestiaire (live)
+    ['bestiary-search', 'bestiary-gen', 'bestiary-class'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', renderBestiary);
     });
 
     // Écoute clavier sur la boîte de texte
@@ -270,6 +304,7 @@ function submitGuess(name) {
     }
 
     attempts.push(monster);
+    updateAttemptsCounter();
     clearAutocomplete();
     document.getElementById('guess-input').value = '';
 
@@ -500,4 +535,70 @@ function shareResults() {
     }).catch(() => {
         showFlash("Échec de la copie automatique.", "ko");
     });
+}
+
+
+// --- Compteur de tentatives (mode daily) ---
+function updateAttemptsCounter() {
+    const el = document.getElementById('attempts-counter');
+    if (currentMode !== 'daily') {
+        el.classList.add('hidden');
+        return;
+    }
+    el.classList.remove('hidden');
+    document.getElementById('attempts-count').textContent = attempts.length;
+}
+
+// --- Rendu du Bestiaire ---
+function renderBestiary() {
+    const grid = document.getElementById('bestiary-grid');
+    const search = document.getElementById('bestiary-search').value.toLowerCase().trim();
+    const genFilter = document.getElementById('bestiary-gen').value;
+    const classFilter = document.getElementById('bestiary-class').value;
+
+    // Peupler les selects une seule fois
+    const genSel = document.getElementById('bestiary-gen');
+    const classSel = document.getElementById('bestiary-class');
+    if (genSel.options.length === 1) {
+        [...new Set(M.map(m => m.g))].sort((a, b) => a - b).forEach(g => {
+            const o = document.createElement('option');
+            o.value = g;
+            o.textContent = 'Génération ' + g;
+            genSel.appendChild(o);
+        });
+        [...new Set(M.map(m => m.c))].sort().forEach(c => {
+            const o = document.createElement('option');
+            o.value = c;
+            o.textContent = c;
+            classSel.appendChild(o);
+        });
+    }
+
+    const filtered = M.filter(m =>
+        (!search || m.n.toLowerCase().includes(search)) &&
+        (!genFilter || m.g == genFilter) &&
+        (!classFilter || m.c === classFilter)
+    ).sort((a, b) => a.n.localeCompare(b.n));
+
+    document.getElementById('bestiary-count').textContent =
+        `— ${filtered.length} / ${M.length} monstres`;
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="besti-empty">Aucun monstre trouvé</div>';
+        return;
+    }
+
+    grid.innerHTML = filtered.map(m => `
+        <div class="besti-card">
+            <div class="besti-name">${m.n}</div>
+            <div class="besti-info">
+                <div>Classe <span>${m.c}</span></div>
+                <div>Génération <span>${m.g}</span></div>
+                <div>Élément <span>${m.e}</span></div>
+                <div>Taille <span>${SL[m.s]}</span></div>
+                <div>Habitat <span>${m.h}</span></div>
+                <div>Danger <span class="besti-danger">${'★'.repeat(m.d)}${'☆'.repeat(5 - m.d)}</span></div>
+            </div>
+        </div>
+    `).join('');
 }
