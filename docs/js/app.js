@@ -80,6 +80,7 @@ function initGame() {
     const input = $('guess-input');
     input.disabled = false;
     input.value = '';
+    document.querySelector('.input-area').style.display = 'flex';
     $('guess-btn').disabled = false;
 
     if (state.mode === 'daily') {
@@ -305,6 +306,7 @@ function endGame(win) {
         localStorage.setItem('mg_daily_date', todayStr);
         localStorage.setItem('mg_daily_state', win ? 'win' : 'lose');
         localStorage.setItem('mg_daily_attempts', JSON.stringify(state.attempts));
+        document.querySelector('.input-area').style.display = 'none';
         showBanner(win);
     } else {
         if (win) {
