@@ -33,6 +33,145 @@ CLASSES DE MONSTRES (Mogapedia) :
 */
 
 /*
+ZONES
+Gen 1
+- Arène
+- Champ de bataille (1G)
+- Château Schrade
+- Forêt et collines
+- Forteresse
+- Grande arène
+- Vieille jungle
+- Vieux désert
+- Vieux marais
+- Vieux volcan
+
+Gen 2
+- Colisée aquatique
+- Désert
+- Grande forêt
+- Jungle
+- Marais
+- Montagne enneigée
+- Pic Mont enneigé
+- Tour
+- Tour 2
+- Tour interdite
+- Ville
+- Volcan (2G)
+
+Gen 3
+- Arène aquatique
+- Arène terrestre
+- Canyon de lave
+- Cime des esprits
+- Forêt inondée
+- Grand désert
+- Île déserte
+- Mer impure
+- Petite arène
+- Pics brumeux
+- Plaines de sable
+- Ruine sous-marine
+- Terre sacrée
+- Toundra
+- Volcan (3G)
+- Zone polaire
+
+Gen 4
+- Arène (MH4)
+- Bastion perdu
+- Bois éternel
+- Champ de bataille (4G)
+- Cime oubliée
+- Cimetière des wyvernes
+- Colisée
+- Dunes
+- Forêt primitive
+- Forteresse (4G)
+- Fort Schrade
+- Frontière jurassique
+- Grand océan
+- Île d'Ingle
+- Mer de glace
+- Mont céleste
+- Pinacle
+- Pointe de lance
+- Sanctuaire
+- Steppe ancestrale
+- Vallon immergé
+- Vallon volcanique
+
+Gen 5
+- Abysses dévorantes
+- Archipel de glace
+- Arène (MHRise)
+- Arène (MHW)
+- Arène spéciale (MHW)
+- Berceau oublié
+- Cavernes de lave
+- Citadelle
+- Croisée des destins
+- Désert des termites
+- Fief glorieux
+- Forêt ancienne
+- Forteresse rouge
+- Fort de Schrade
+- Garde-provisions Seliana
+- Givre éternel
+- Grand ravin
+- Jungle (MHRS)
+- Palais de coraux
+- Plaines de sable (MHRise)
+- Plateau de corail
+- Rivière éternelle
+- Sources infernales
+- Temple oublié
+- Terre des anciens
+- Val putride
+- Vallée secrète
+
+Gen 6
+- Bassin pétrolier
+- Forêt écarlate
+- Plaines venteuses
+
+Frontier
+- Ancienne forteresse
+- Avant-Poste
+- Canyon
+- Cascades luxuriantes
+- Champ de Fleurs
+- Corridor céleste
+- Cratère volcanique
+- Désert blanc
+- Fin du Monde
+- Forêt de Bambou
+- Grand Navire d'Exploration
+- Île Isolée
+- Île tropicale
+- Mer Polaire
+- Mirador céleste
+- Profondeurs de l'île isolée
+- Région Montagneuse
+- Sommet de la Grande Forest
+- Tanière
+
+Online
+- Bois venteux
+- Crête enneigée
+- Désert lunaire
+- Forêt de l'ermite
+- Grand lac de la forteresse
+- Lac d'Esther
+- Marais de Kumbel
+- Montagne enneigée d'Yilufa
+- Plateaux sablonneux
+- Sombre forêt cachée
+- Tombeau ancestral
+*/
+
+/*
 STATUTS ET FLÉAUX (Ailments & Blights) :
 - Boue / Neige / Toile (Muddy / Snowy / Webbed)
 - Étourdissement (Stun)
