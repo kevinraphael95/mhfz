@@ -25,13 +25,13 @@
   --correct-bd:  #2ea85a;
   --correct-tx:  #5ef09a;
 
-  --wrong-bg:    #200c0c;
-  --wrong-bd:    #c83030;
-  --wrong-tx:    #f07070;
+  --wrong-bg:    #1a0505;
+  --wrong-bd:    #e83535;
+  --wrong-tx:    #ff6060;
 
-  --close-bg:    #1e1800;
-  --close-bd:    #c8a020;
-  --close-tx:    #f0d060;
+  --close-bg:    #1a1500;
+  --close-bd:    #d4a800;
+  --close-tx:    #ffe040;
 
   --surv-grad:   linear-gradient(135deg,#7a1515,#a02020);
   --surv-hover:  linear-gradient(135deg,#a02020,#c03030);
