@@ -346,6 +346,18 @@ function showBanner(win) {
         if (i < state.attempts.length) d.classList.add(state.attempts[i].n === state.target.n ? 'win' : 'lose');
         row.appendChild(d);
     }
+
+    if (!win) {
+        const resetBtn = el('button', 'share-btn', 'Réinitialiser ↺');
+        resetBtn.style.marginTop = '6px';
+        resetBtn.addEventListener('click', () => {
+            localStorage.removeItem('mg_daily_date');
+            localStorage.removeItem('mg_daily_state');
+            localStorage.removeItem('mg_daily_attempts');
+            location.reload();
+        });
+        $('result-banner').appendChild(resetBtn);
+    }
 }
 
 // ── Restauration daily ─────────────────────
