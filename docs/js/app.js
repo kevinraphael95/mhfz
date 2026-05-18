@@ -355,8 +355,12 @@ function restoreDaily() {
     state.attempts = savedAttempts;
     savedAttempts.forEach(m => addRow(m));
     updateLiveDots();
-    // Partie terminée → afficher le résultat ; sinon juste remettre les lignes
-    if (savedState) endGame(savedState === 'win');
+    // Partie terminée seulement si la date ET le state correspondent
+    const todayStr = new Date().toDateString();
+    const savedDate = localStorage.getItem('mg_daily_date');
+    if (savedState && savedDate === todayStr && (savedState === 'win' || savedAttempts.length >= MAX)) {
+        endGame(savedState === 'win');
+    }
 }
 
 // ── Flash ──────────────────────────────────
