@@ -69,6 +69,13 @@ function getDailyMonster() {
 
 // ── Initialisation d'une partie ────────────
 function initGame() {
+    const todayStr = new Date().toDateString();
+    if (localStorage.getItem('mg_daily_date') !== todayStr) {
+        localStorage.removeItem('mg_daily_date');
+        localStorage.removeItem('mg_daily_state');
+        localStorage.removeItem('mg_daily_attempts');
+    }
+
     state.attempts = [];
     state.over = false;
 
