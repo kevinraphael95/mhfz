@@ -95,7 +95,7 @@ function initGame() {
     } else {
         state.target = M[Math.floor(Math.random() * M.length)];
         document.body.classList.add('survival-mode');
-        updateSurvUI();
+       
     }
     updateLiveDots();
 }
@@ -114,18 +114,7 @@ function switchMode(mode) {
     initGame();
 }
 
-// ── Survie UI ──────────────────────────────
-function updateSurvUI() {
-    $('surv-score').textContent = state.survScore;
-    $('surv-best').textContent = state.survBest;
-    const c = $('surv-lives-container');
-    c.innerHTML = '';
-    for (let i = 0; i < 3; i++) {
-        const d = el('div', 'sdot');
-        d.classList.add(i < state.survLives ? 'win' : 'used');
-        c.appendChild(d);
-    }
-}
+
 
 // ── Boules daily en cours ──────────────────
 function updateLiveDots() {
@@ -228,11 +217,9 @@ function submit(name) {
         endGame(true);
     } else if (state.mode === 'daily' && state.attempts.length >= MAX) {
         endGame(false);
-    } else if (state.mode === 'survival') {
-        state.survLives--;
-        updateSurvUI();
-        if (state.survLives <= 0) endGame(false);
-        else flash(`Ce n'est pas la bonne cible ! Il vous reste ${state.survLives} essai(s).`, "ko");
+ 
+    } else if (state.mode === 'survival' && state.attempts.length >= MAX) {
+        endGame(false);
     }
 }
 
@@ -317,8 +304,18 @@ function endGame(win) {
                 state.survBest = state.survScore;
                 localStorage.setItem('mg_surv_best', state.survBest);
             }
-            flash(`Cible abattue ! Prochain monstre...`, "ok");
-            setTimeout(initGame, 2000);
+            flash(`Monstre trouvé en ${state.attempts.length} essais ! Prochain monstre...`, "ok");
+            setTimeout(() => {
+                state.attempts = [];
+                state.over = false;
+                $('desktop-rows-container').innerHTML = '';
+                $('mobile-cards-container').innerHTML = '';
+                state.target = M[Math.floor(Math.random() * M.length)];
+                $('guess-input').disabled = false;
+                $('guess-btn').disabled = false;
+                $('guess-input').value = '';
+                updateSurvUI();
+            }, 2000);
         } else {
             $('go-title').textContent = "QUEST FAILED !";
             $('go-message').textContent = `Vous avez été terrassé par le ${state.target.n}.`;
@@ -333,7 +330,7 @@ function endGame(win) {
 function showBanner(win) {
     const banner = $('result-banner');
     banner.className = `result-banner show ${win ? 'win' : 'lose'}`;
-    $('res-title').textContent = win ? "CHASSE EFFECTUÉE !" : "QUEST FAILED !";
+    $('res-title').textContent = win ? "QUEST CLEARED !" : "QUEST FAILED !";
     $('res-monster').textContent = state.target.n;
     $('res-desc').textContent = win
         ? `Félicitations. Vous avez localisé la créature en ${state.attempts.length} essais.`
