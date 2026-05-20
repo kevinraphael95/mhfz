@@ -330,7 +330,7 @@ function endGame(win) {
 function showBanner(win) {
     const banner = $('result-banner');
     banner.className = `result-banner show ${win ? 'win' : 'lose'}`;
-    $('res-title').textContent = win ? "CHASSE EFFECTUÉE !" : "QUEST FAILED !";
+    $('res-title').textContent = win ? "QUEST CLEARED !" : "QUEST FAILED !";
     $('res-monster').textContent = state.target.n;
     $('res-desc').textContent = win
         ? `Félicitations. Vous avez localisé la créature en ${state.attempts.length} essais.`
