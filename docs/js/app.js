@@ -2,11 +2,9 @@
    MONSTER GUESSR — app.js
 ═══════════════════════════════════════════ */
 
-// ── Constantes UI ──────────────────────────
 const $ = id => document.getElementById(id);
 const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; };
 
-// ── État global ────────────────────────────
 const state = {
     mode: 'daily',
     target: null,
@@ -18,16 +16,13 @@ const state = {
     acIndex: -1,
 };
 
-// ── Init ───────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     setupEvents();
     switchMode('daily');
     startClock();
-    $('surv-best').textContent = state.survBest;
 });
 
-// ── Thème ──────────────────────────────────
 function initTheme() {
     const saved = localStorage.getItem('mg_theme') || 'dark';
     setTheme(saved);
@@ -45,7 +40,6 @@ function setTheme(t) {
         : '<span class="t-icon">🌙</span><span class="t-label"> Sombre</span>';
 }
 
-// ── Horloge countdown ──────────────────────
 function startClock() {
     const tick = () => {
         const now = new Date();
@@ -58,7 +52,6 @@ function startClock() {
     setInterval(tick, 1000);
 }
 
-// ── Daily monster (hash stable sur la date) ─
 function getDailyMonster() {
     const d = new Date();
     const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
@@ -67,7 +60,6 @@ function getDailyMonster() {
     return M[Math.abs(h) % M.length];
 }
 
-// ── Initialisation d'une partie ────────────
 function initGame() {
     const todayStr = new Date().toDateString();
     if (localStorage.getItem('mg_daily_date') !== todayStr) {
@@ -100,14 +92,23 @@ function initGame() {
             return;
         }
     } else {
-        state.target = M[Math.floor(Math.random() * M.length)];
+        const savedTarget = localStorage.getItem('mg_surv_target');
+        const savedAttempts = JSON.parse(localStorage.getItem('mg_surv_attempts')) || [];
+        const found = M.find(m => m.n === savedTarget);
+        if (found && savedAttempts.length > 0 && savedAttempts.length < MAX) {
+            state.target = found;
+            state.attempts = savedAttempts;
+            savedAttempts.forEach(m => addRow(m));
+        } else {
+            state.target = M[Math.floor(Math.random() * M.length)];
+            localStorage.removeItem('mg_surv_attempts');
+            localStorage.removeItem('mg_surv_target');
+        }
         document.body.classList.add('survival-mode');
-       
     }
     updateLiveDots();
 }
 
-// ── Modes ──────────────────────────────────
 function switchMode(mode) {
     state.mode = mode;
     $('btn-daily').classList.toggle('active', mode === 'daily');
@@ -121,9 +122,6 @@ function switchMode(mode) {
     initGame();
 }
 
-
-
-// ── Boules daily en cours ──────────────────
 function updateLiveDots() {
     const wrap = state.mode === 'daily' ? $('daily-dots-live') : $('surv-dots-live');
     if (!wrap) return;
@@ -137,32 +135,26 @@ function updateLiveDots() {
     }
 }
 
-// ── Autocomplétion ─────────────────────────
 function setupEvents() {
     const input = $('guess-input');
 
-    // Modes
     $('btn-daily').addEventListener('click', () => switchMode('daily'));
     $('btn-surv').addEventListener('click', () => switchMode('survival'));
     $('retry-btn').addEventListener('click', initGame);
 
-    // Modals
     $('btn-help').addEventListener('click', () => openModal('modal-help'));
     $('btn-bestiary').addEventListener('click', () => { renderBestiary(); openModal('modal-bestiary'); });
     document.querySelectorAll('.modal-close').forEach(b => b.addEventListener('click', () => closeModal(b.dataset.modal)));
     document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) closeModal(o.id); }));
     document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id)); });
 
-    // Filtres bestiaire
     ['bestiary-search','bestiary-gen','bestiary-class'].forEach(id => $(id)?.addEventListener('input', renderBestiary));
 
-    // Input
     input.addEventListener('input', updateAC);
     input.addEventListener('keydown', onInputKey);
     $('guess-btn').addEventListener('click', () => submit(input.value));
     document.addEventListener('click', e => { if (!e.target.closest('.autocomplete-wrap')) clearAC(); });
 
-    // Partage
     $('share-btn').addEventListener('click', shareResults);
 }
 
@@ -201,7 +193,6 @@ function highlightAC(items) {
 
 function clearAC() { $('autocomplete-list').innerHTML = ''; state.acIndex = -1; }
 
-// ── Soumettre un essai ─────────────────────
 function submit(name) {
     if (state.over) return;
     const monster = M.find(m => m.n.toLowerCase() === name.toLowerCase().trim());
@@ -214,23 +205,24 @@ function submit(name) {
     addRow(monster);
     updateLiveDots();
 
-    // Sauvegarde en cours de partie (daily)
     if (state.mode === 'daily') {
         localStorage.setItem('mg_daily_date', new Date().toDateString());
         localStorage.setItem('mg_daily_attempts', JSON.stringify(state.attempts));
+    }
+    if (state.mode === 'survival') {
+        localStorage.setItem('mg_surv_attempts', JSON.stringify(state.attempts));
+        localStorage.setItem('mg_surv_target', state.target.n);
     }
 
     if (monster.n === state.target.n) {
         endGame(true);
     } else if (state.mode === 'daily' && state.attempts.length >= MAX) {
         endGame(false);
- 
     } else if (state.mode === 'survival' && state.attempts.length >= MAX) {
         endGame(false);
     }
 }
 
-// ── Comparaison ────────────────────────────
 function compare(key, val) {
     const t = state.target[key];
     if (val === t) return 'correct';
@@ -250,12 +242,10 @@ function cellVal(key, monster) {
     return monster[key];
 }
 
-// ── Rendu d'un essai ───────────────────────
 function addRow(monster) {
     const isWin = monster.n === state.target.n;
     const nameCls = isWin ? 'correct' : 'wrong';
 
-    // Desktop
     const row = el('div', 'guess-row');
     const nameCell = el('div', `guess-cell ${nameCls}`, monster.n);
     nameCell.style.textAlign = 'left';
@@ -271,7 +261,6 @@ function addRow(monster) {
     });
     $('desktop-rows-container').insertBefore(row, $('desktop-rows-container').firstChild);
 
-    // Mobile
     const card = el('div', 'guess-card');
     card.innerHTML = `
         <div class="guess-card-header">
@@ -290,7 +279,6 @@ function addRow(monster) {
     $('mobile-cards-container').insertBefore(card, $('mobile-cards-container').firstChild);
 }
 
-// ── Fin de partie ──────────────────────────
 function endGame(win) {
     state.over = true;
     $('guess-input').disabled = true;
@@ -305,6 +293,8 @@ function endGame(win) {
         $('daily-dots-bar').style.display = 'none';
         showBanner(win);
     } else {
+        localStorage.removeItem('mg_surv_attempts');
+        localStorage.removeItem('mg_surv_target');
         if (win) {
             state.survScore++;
             if (state.survScore > state.survBest) {
@@ -321,7 +311,7 @@ function endGame(win) {
                 $('guess-input').disabled = false;
                 $('guess-btn').disabled = false;
                 $('guess-input').value = '';
-                updateSurvUI();
+                updateLiveDots();
             }, 2000);
         } else {
             $('go-title').textContent = "QUEST FAILED !";
@@ -333,7 +323,6 @@ function endGame(win) {
     }
 }
 
-// ── Bannière de fin daily ──────────────────
 function showBanner(win) {
     const banner = $('result-banner');
     banner.className = `result-banner show ${win ? 'win' : 'lose'}`;
@@ -352,14 +341,12 @@ function showBanner(win) {
     }
 }
 
-// ── Restauration daily ─────────────────────
 function restoreDaily() {
     const savedState = localStorage.getItem('mg_daily_state');
     const savedAttempts = JSON.parse(localStorage.getItem('mg_daily_attempts')) || [];
     state.attempts = savedAttempts;
     savedAttempts.forEach(m => addRow(m));
     updateLiveDots();
-    // Partie terminée seulement si la date ET le state correspondent
     const todayStr = new Date().toDateString();
     const savedDate = localStorage.getItem('mg_daily_date');
     if (savedState && savedDate === todayStr && (savedState === 'win' || savedAttempts.length >= MAX)) {
@@ -367,7 +354,6 @@ function restoreDaily() {
     }
 }
 
-// ── Flash ──────────────────────────────────
 function flash(msg, type) {
     const f = $('flash-msg');
     f.textContent = msg;
@@ -376,7 +362,6 @@ function flash(msg, type) {
     f._t = setTimeout(() => f.classList.remove('on'), 4000);
 }
 
-// ── Partage ────────────────────────────────
 function shareResults() {
     const emojiMap = { correct: '🟩', close: '🟨', wrong: '🟥' };
     let text = `⚔️ Monster Guessr — Quotidien\n📊 ${state.attempts.length}/${MAX}\n\n`;
@@ -391,7 +376,6 @@ function shareResults() {
         .catch(() => flash("Échec de la copie.", "ko"));
 }
 
-// ── Bestiaire ──────────────────────────────
 function renderBestiary() {
     const search = $('bestiary-search').value.toLowerCase().trim();
     const genF = $('bestiary-gen').value;
@@ -434,8 +418,6 @@ function renderBestiary() {
         </div>`).join('');
 }
 
-
-// ── KONAMI CODE ───────────────────────────────────────────────
 (function () {
   const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
   let buf = [];
