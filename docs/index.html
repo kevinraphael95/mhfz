@@ -8,15 +8,12 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
     <header>
         <div class="header-banner">
             <img src="assets/monsterhunter.jpg" alt="" class="header-bg">
             <div class="header-overlay"></div>
             <div class="header-content">
-                <div class="logo-row">
-                    <h1>MONSTER GUESSER</h1>
-                </div>
+                <div class="logo-row"><h1>MONSTER GUESSER</h1></div>
                 <div class="subtitle">Chasse le monstre ! Devine son nom !</div>
             </div>
             <button id="theme-toggle" aria-label="Changer de thème">
@@ -27,7 +24,6 @@
     </header>
 
     <main>
-        <!-- Sélecteur de mode de jeu -->
         <div class="mode-sw">
             <button class="mbtn help-mbtn" id="btn-help">?</button>
             <div class="mode-sep"></div>
@@ -38,33 +34,16 @@
             <button class="mbtn besti-mbtn" id="btn-bestiary">🐲</button>
         </div>
 
-        <!-- Boules de tentatives daily en cours -->
         <div class="daily-dots-bar" id="daily-dots-bar">
             <div class="ddb-dots" id="daily-dots-live"></div>
         </div>
 
-        <!-- Barre de statistiques en Mode Survie -->
-        <div class="surv-bar" id="survival-status-bar">
-            <div class="sv">
-                <span class="sv-n" id="surv-score">0</span>
-                <span class="sv-l">Score</span>
-            </div>
-            <div class="svdiv"></div>
-            <div class="sv">
-                <span class="sv-n" id="surv-best">0</span>
-                <span class="sv-l">Meilleur</span>
-            </div>
-            <div class="svdiv"></div>
-            <div class="sdots-w">
-                <span class="sv-l">Vies</span>
-                <div class="sdots" id="surv-lives-container"></div>
-            </div>
+        <div class="daily-dots-bar" id="survival-dots-bar" style="display:none;">
+            <div class="ddb-dots" id="surv-dots-live"></div>
         </div>
 
-        <!-- Bandeau Flash -->
         <div class="flash" id="flash-msg"></div>
 
-        <!-- Zone d'écriture et autocomplétion -->
         <div class="input-area">
             <div class="autocomplete-wrap">
                 <input type="text" id="guess-input" class="guess-input" placeholder="Entrez le nom d'un monstre..." autocomplete="off">
@@ -73,7 +52,6 @@
             <button id="guess-btn" class="guess-btn">Chasser</button>
         </div>
 
-        <!-- Écran Game Over -->
         <div class="send" id="game-over-screen">
             <div class="se-t" id="go-title">FIN DE CHASSE</div>
             <div class="se-s" id="go-message">Le monstre a pris la fuite...</div>
@@ -84,7 +62,6 @@
             <button class="r2btn" id="retry-btn">Nouvelle Traque</button>
         </div>
 
-        <!-- Bannière de résultat principal -->
         <div class="result-banner" id="result-banner">
             <div class="result-title" id="res-title">VICTOIRE !</div>
             <div class="result-monster" id="res-monster">Rathalos</div>
@@ -98,7 +75,6 @@
             </div>
         </div>
 
-        <!-- Tableau desktop -->
         <div class="guesses-container">
             <div class="guesses-header" id="table-header">
                 <div style="text-align: left; padding-left: 8px;">MONSTRE</div>
@@ -112,11 +88,9 @@
             <div id="desktop-rows-container"></div>
         </div>
 
-        <!-- Cards mobile -->
         <div class="guess-cards" id="mobile-cards-container"></div>
     </main>
 
-    <!-- MODAL — COMMENT JOUER -->
     <div class="modal-overlay" id="modal-help">
         <div class="modal-box">
             <div class="modal-header">
@@ -131,12 +105,11 @@
                 <div class="legend-row"><div class="lb2 r"></div> <span>Aucune correspondance</span></div>
                 <p style="margin-top: 14px;">Les flèches <span class="arrow">▲</span> ou <span class="arrow">▼</span> indiquent si la valeur recherchée est plus haute ou plus basse.</p>
                 <p style="margin-top: 14px; color: var(--text-dim); font-size: 13px;">En mode <strong style="color: var(--accent2); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .08em;">Quotidien</strong>, vous avez 8 tentatives. Le monstre change chaque jour à minuit.</p>
-                <p style="margin-top: 6px; color: var(--text-dim); font-size: 13px;">En mode <strong style="color: var(--surv-text); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .08em;">Survie</strong>, chaque erreur coûte une vie. Enchaînez les victoires pour maximiser votre score.</p>
+                <p style="margin-top: 6px; color: var(--text-dim); font-size: 13px;">En mode <strong style="color: var(--surv-text); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .08em;">Survie</strong>, enchaînez les victoires pour maximiser votre score.</p>
             </div>
         </div>
     </div>
 
-    <!-- MODAL — BESTIAIRE -->
     <div class="modal-overlay" id="modal-bestiary">
         <div class="modal-box modal-large">
             <div class="modal-header">
@@ -146,21 +119,13 @@
             <div class="modal-body">
                 <div class="bestiary-filters">
                     <input type="text" id="bestiary-search" placeholder="Rechercher un monstre..." autocomplete="off">
-                    <select id="bestiary-gen">
-                        <option value="">Toutes les générations</option>
-                    </select>
-                    <select id="bestiary-class">
-                        <option value="">Toutes les classes</option>
-                    </select>
+                    <select id="bestiary-gen"><option value="">Toutes les générations</option></select>
+                    <select id="bestiary-class"><option value="">Toutes les classes</option></select>
                 </div>
                 <div id="bestiary-grid"></div>
             </div>
         </div>
     </div>
-
-<!--
-    <button onclick="localStorage.clear();location.reload()" style="position:fixed;bottom:10px;right:10px;z-index:9999;padding:8px;background:red;color:white;border:none;font-size:12px;">RESET</button> 
--->  
 
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
