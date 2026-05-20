@@ -114,7 +114,7 @@ function switchMode(mode) {
     $('btn-surv').classList.toggle('active', mode === 'survival');
 
     const isDaily = mode === 'daily';
-    $('survival-status-bar').classList.toggle('on', !isDaily);
+    $('survival-dots-bar').style.display = isDaily ? 'none' : 'flex';
     $('daily-dots-bar').classList.toggle('hidden', !isDaily);
 
     if (!isDaily) { state.survScore = 0; state.survLives = 3; }
@@ -125,8 +125,8 @@ function switchMode(mode) {
 
 // ── Boules daily en cours ──────────────────
 function updateLiveDots() {
-    if (state.mode !== 'daily') return;
-    const wrap = $('daily-dots-live');
+    const wrap = state.mode === 'daily' ? $('daily-dots-live') : $('surv-dots-live');
+    if (!wrap) return;
     wrap.innerHTML = '';
     for (let i = 0; i < MAX; i++) {
         const d = el('div', 'ddot');
