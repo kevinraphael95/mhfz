@@ -2,7 +2,7 @@
    MONSTER GUESSR — style.css
 ═══════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Pirata+One&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap');
 
 /* ── Thème sombre ── */
 :root, [data-theme="dark"] {
@@ -89,7 +89,8 @@
 
 /* ── Base — font unique héritée partout ── */
 body {
-  font-family: 'Pirata One', serif;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
