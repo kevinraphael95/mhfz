@@ -90,6 +90,7 @@
 /* ── Base — font unique héritée partout ── */
 body {
   font-family: 'Cinzel', serif;
+  font-weight: 600;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
