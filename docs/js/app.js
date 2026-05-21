@@ -27,7 +27,7 @@ const state = {
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   setupEvents();
-  switchMode('daily');
+  switchMode(localStorage.getItem('mg_mode') || 'daily');
   startClock();
 });
 
@@ -150,6 +150,8 @@ function pickSurvivalMonster(exclude = state.target) {
    ══════════════════════════════════════════ */
 function switchMode(mode) {
   state.mode = mode;
+  localStorage.setItem('mg_mode', mode);
+
   $('btn-daily').classList.toggle('active', mode === 'daily');
   $('btn-surv').classList.toggle('active',  mode === 'survival');
 
