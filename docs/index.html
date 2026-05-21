@@ -49,6 +49,12 @@
       <div class="mode-sep"></div>
       <button class="mbtn besti-mbtn" id="btn-bestiary"  aria-label="Bestiaire">🐲</button>
     </div>
+    <script>
+      if (localStorage.getItem('mg_mode') === 'survival') {
+        document.getElementById('btn-daily').classList.remove('active');
+        document.getElementById('btn-surv').classList.add('active');
+      }
+    </script>
 
     <!-- Dots daily -->
     <div class="daily-dots-bar" id="daily-dots-bar">
