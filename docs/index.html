@@ -10,10 +10,12 @@
   <meta property="og:type"        content="website">
   <meta property="og:url"         content="https://kevinraphael95.github.io/mhfz/">
 
-  <!-- Anti-flash thème : appliqué avant tout rendu -->
+  <!-- Anti-flash : thème + mode appliqués avant tout rendu -->
   <script>
     const t = localStorage.getItem('mg_theme');
     if (t) document.documentElement.setAttribute('data-theme', t);
+    const m = localStorage.getItem('mg_mode');
+    if (m) document.documentElement.setAttribute('data-mode', m);
   </script>
 
   <link rel="stylesheet" href="css/style.css">
