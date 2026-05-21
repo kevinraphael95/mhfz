@@ -25,9 +25,10 @@ const state = {
 
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', () => {
+  const savedMode = document.documentElement.getAttribute('data-mode') || 'daily';
   initTheme();
   setupEvents();
-  switchMode(localStorage.getItem('mg_mode') || 'daily');
+  switchMode(savedMode);
   startClock();
 });
 
@@ -159,7 +160,6 @@ function switchMode(mode) {
   $('survival-dots-bar').style.display = isDaily ? 'none' : 'flex';
   $('daily-dots-bar').classList.toggle('hidden', !isDaily);
 
-  if (!isDaily) { state.survScore = 0; state.survLives = 3; }
   initGame();
 }
 
