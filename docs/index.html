@@ -1,133 +1,183 @@
 <!DOCTYPE html>
 <html lang="fr" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monster Guesser</title>
-    <script>const t=localStorage.getItem('mg_theme');if(t)document.documentElement.setAttribute('data-theme',t);</script>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monster Guessr</title>
+  <meta name="description" content="Devinez le monstre Monster Hunter caché chaque jour. Mode quotidien et mode survie.">
+  <meta property="og:title"       content="Monster Guessr">
+  <meta property="og:description" content="Devinez le monstre Monster Hunter caché chaque jour !">
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://kevinraphael95.github.io/mhfz/">
+
+  <!-- Anti-flash thème : appliqué avant tout rendu -->
+  <script>
+    const t = localStorage.getItem('mg_theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <div class="header-banner">
-            <img src="assets/monsterhunter.jpg" alt="" class="header-bg">
-            <div class="header-overlay"></div>
-            <div class="header-content">
-                <div class="logo-row"><h1>MONSTER GUESSER</h1></div>
-                <div class="subtitle">Chasse le monstre ! Devine son nom !</div>
-            </div>
-            <button id="theme-toggle" aria-label="Changer de thème">
-                <span class="t-icon">☀</span><span class="t-label">Thème</span>
-            </button>
-        </div>
-        <div class="divider"></div>
-    </header>
 
-    <main>
-        <div class="mode-sw">
-            <button class="mbtn help-mbtn" id="btn-help">?</button>
-            <div class="mode-sep"></div>
-            <button class="mbtn active" id="btn-daily">Quotidien</button>
-            <div class="mode-sep"></div>
-            <button class="mbtn surv" id="btn-surv">Survie</button>
-            <div class="mode-sep"></div>
-            <button class="mbtn besti-mbtn" id="btn-bestiary">🐲</button>
-        </div>
+  <header>
+    <div class="header-banner">
+      <img src="assets/monsterhunter.jpg" alt="Monster Hunter bannière" class="header-bg" loading="eager">
+      <div class="header-overlay"></div>
+      <div class="header-content">
+        <div class="logo-row"><h1>MONSTER GUESSR</h1></div>
+        <div class="subtitle">Chasse le monstre ! Devine son nom !</div>
+      </div>
+      <button id="theme-toggle" aria-label="Changer de thème">
+        <span class="t-icon">☀</span><span class="t-label"> Thème</span>
+      </button>
+    </div>
+    <div class="divider"></div>
+  </header>
 
-        <div class="daily-dots-bar" id="daily-dots-bar">
-            <div class="ddb-dots" id="daily-dots-live"></div>
-        </div>
+  <main>
 
-        <div class="daily-dots-bar" id="survival-dots-bar" style="display:none;">
-            <div class="ddb-dots" id="surv-dots-live"></div>
-        </div>
-
-        <div class="flash" id="flash-msg"></div>
-
-        <div class="input-area">
-            <div class="autocomplete-wrap">
-                <input type="text" id="guess-input" class="guess-input" placeholder="Entrez le nom d'un monstre..." autocomplete="off">
-                <div id="autocomplete-list" class="autocomplete-list"></div>
-            </div>
-            <button id="guess-btn" class="guess-btn">Chasser</button>
-        </div>
-
-        <div class="send" id="game-over-screen">
-            <div class="se-t" id="go-title">FIN DE CHASSE</div>
-            <div class="se-s" id="go-message">Le monstre a pris la fuite...</div>
-            <div class="sestats">
-                <div class="sestat"><strong id="stat-streak">0</strong><span>SÉRIE ACTUELLE</span></div>
-                <div class="sestat"><strong id="stat-guesses">0</strong><span>ESSAIS TOTAL</span></div>
-            </div>
-            <button class="r2btn" id="retry-btn">Nouvelle Traque</button>
-        </div>
-
-        <div class="result-banner" id="result-banner">
-            <div class="result-title" id="res-title">VICTOIRE !</div>
-            <div class="result-monster" id="res-monster">Rathalos</div>
-            <div class="result-desc" id="res-desc">Un magnifique spécimen terrassé avec succès.</div>
-            <div class="attempts-row" id="attempts-dots-row"></div>
-            <div class="next-timer" id="res-timer-container">
-                Prochaine quête dans : <span id="res-timer">00:00:00</span>
-            </div>
-            <div style="margin-top: 10px;">
-                <button class="share-btn" id="share-btn">Partager le rapport ⚔</button>
-            </div>
-        </div>
-
-        <div class="guesses-container">
-            <div class="guesses-header" id="table-header">
-                <div style="text-align: left; padding-left: 8px;">MONSTRE</div>
-                <div>CLASSE</div>
-                <div>PREMIERE APPARITION (GÉNÉRATION)</div>
-                <div>ÉLÉMENT</div>
-                <div>TAILLE</div>
-                <div>HABITAT</div>
-                <div>DANGER</div>
-            </div>
-            <div id="desktop-rows-container"></div>
-        </div>
-
-        <div class="guess-cards" id="mobile-cards-container"></div>
-    </main>
-
-    <div class="modal-overlay" id="modal-help">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h2 class="modal-title">Comment jouer</h2>
-                <button class="modal-close" data-modal="modal-help">✕</button>
-            </div>
-            <div class="modal-body">
-                <p style="margin-bottom: 10px;">Devinez le monstre de l'univers <strong style="color: var(--accent2); font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .08em;">Monster Hunter</strong> caché en un minimum de tentatives.</p>
-                <p style="margin-bottom: 14px;">À chaque essai, la couleur des cellules vous guide :</p>
-                <div class="legend-row"><div class="lb2 g"></div> <span>Correspondance parfaite</span></div>
-                <div class="legend-row"><div class="lb2 y"></div> <span>Partiellement correct ou proche (ex: même biome partagé, valeur proche)</span></div>
-                <div class="legend-row"><div class="lb2 r"></div> <span>Aucune correspondance</span></div>
-                <p style="margin-top: 14px;">Les flèches <span class="arrow">▲</span> ou <span class="arrow">▼</span> indiquent si la valeur recherchée est plus haute ou plus basse.</p>
-                <p style="margin-top: 14px; color: var(--text-dim); font-size: 13px;">En mode <strong style="color: var(--accent2); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .08em;">Quotidien</strong>, vous avez 8 tentatives. Le monstre change chaque jour à minuit.</p>
-                <p style="margin-top: 6px; color: var(--text-dim); font-size: 13px;">En mode <strong style="color: var(--surv-text); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .08em;">Survie</strong>, enchaînez les victoires pour maximiser votre score.</p>
-            </div>
-        </div>
+    <!-- Mode switcher -->
+    <div class="mode-sw">
+      <button class="mbtn help-mbtn"  id="btn-help"      aria-label="Aide">?</button>
+      <div class="mode-sep"></div>
+      <button class="mbtn active"     id="btn-daily">Quotidien</button>
+      <div class="mode-sep"></div>
+      <button class="mbtn surv"       id="btn-surv">Survie</button>
+      <div class="mode-sep"></div>
+      <button class="mbtn besti-mbtn" id="btn-bestiary"  aria-label="Bestiaire">🐲</button>
     </div>
 
-    <div class="modal-overlay" id="modal-bestiary">
-        <div class="modal-box modal-large">
-            <div class="modal-header">
-                <h2 class="modal-title">Bestiaire <span id="bestiary-count" style="font-size: 12px; color: var(--text-dim); font-weight: 400; letter-spacing: .05em;"></span></h2>
-                <button class="modal-close" data-modal="modal-bestiary">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="bestiary-filters">
-                    <input type="text" id="bestiary-search" placeholder="Rechercher un monstre..." autocomplete="off">
-                    <select id="bestiary-gen"><option value="">Toutes les générations</option></select>
-                    <select id="bestiary-class"><option value="">Toutes les classes</option></select>
-                </div>
-                <div id="bestiary-grid"></div>
-            </div>
-        </div>
+    <!-- Dots daily -->
+    <div class="daily-dots-bar" id="daily-dots-bar">
+      <div class="ddb-dots" id="daily-dots-live"></div>
     </div>
 
-    <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
+    <!-- Dots survie -->
+    <div class="daily-dots-bar" id="survival-dots-bar" style="display:none;">
+      <div class="ddb-dots" id="surv-dots-live"></div>
+    </div>
+
+    <!-- Survie bar -->
+    <div class="surv-bar" id="surv-bar">
+      <div class="sv">
+        <div class="sv-n" id="surv-score">0</div>
+        <div class="sv-l">SÉRIE</div>
+      </div>
+      <div class="svdiv"></div>
+      <div class="sv">
+        <div class="sv-n" id="surv-best">0</div>
+        <div class="sv-l">MEILLEUR</div>
+      </div>
+    </div>
+
+    <!-- Flash -->
+    <div class="flash" id="flash-msg" role="alert" aria-live="polite"></div>
+
+    <!-- Input -->
+    <div class="input-area">
+      <div class="autocomplete-wrap">
+        <input
+          type="text"
+          id="guess-input"
+          class="guess-input"
+          placeholder="Entrez le nom d'un monstre..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Nom du monstre"
+          aria-autocomplete="list"
+          aria-controls="autocomplete-list"
+        >
+        <div id="autocomplete-list" class="autocomplete-list" role="listbox"></div>
+      </div>
+      <button id="guess-btn" class="guess-btn">Chasser</button>
+    </div>
+
+    <!-- Game over survie -->
+    <div class="send" id="game-over-screen" aria-live="polite">
+      <div class="se-t" id="go-title">FIN DE CHASSE</div>
+      <div class="se-s" id="go-message">Le monstre a pris la fuite...</div>
+      <div class="sestats">
+        <div class="sestat"><strong id="stat-streak">0</strong><span>SÉRIE ACTUELLE</span></div>
+        <div class="sestat"><strong id="stat-guesses">0</strong><span>ESSAIS TOTAL</span></div>
+      </div>
+      <button class="r2btn" id="retry-btn">Nouvelle Traque</button>
+    </div>
+
+    <!-- Banner résultat daily -->
+    <div class="result-banner" id="result-banner" aria-live="polite">
+      <div class="result-title"   id="res-title">VICTOIRE !</div>
+      <div class="result-monster" id="res-monster">Rathalos</div>
+      <div class="result-desc"    id="res-desc">Un magnifique spécimen terrassé avec succès.</div>
+      <div class="attempts-row"   id="attempts-dots-row"></div>
+      <div class="next-timer" id="res-timer-container">
+        Prochaine quête dans : <span id="res-timer">00:00:00</span>
+      </div>
+      <div style="margin-top:10px;">
+        <button class="share-btn" id="share-btn">Partager le rapport ⚔</button>
+      </div>
+    </div>
+
+    <!-- Table desktop -->
+    <div class="guesses-container">
+      <div class="guesses-header" id="table-header">
+        <div style="text-align:left;padding-left:8px;">MONSTRE</div>
+        <div>CLASSE</div>
+        <div>GÉNÉRATION</div>
+        <div>ÉLÉMENT</div>
+        <div>TAILLE</div>
+        <div>HABITAT</div>
+        <div>DANGER</div>
+      </div>
+      <div id="desktop-rows-container"></div>
+    </div>
+
+    <!-- Cards mobile -->
+    <div class="guess-cards" id="mobile-cards-container"></div>
+
+  </main>
+
+  <!-- Modal aide -->
+  <div class="modal-overlay" id="modal-help" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 class="modal-title" id="help-title">Comment jouer</h2>
+        <button class="modal-close" data-modal="modal-help" aria-label="Fermer">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom:10px;">Devinez le monstre de l'univers <strong style="color:var(--accent2);font-family:var(--font-display);font-size:12px;letter-spacing:.08em;">Monster Hunter</strong> caché en un minimum de tentatives.</p>
+        <p style="margin-bottom:14px;">À chaque essai, la couleur des cellules vous guide :</p>
+        <div class="legend-row"><div class="lb2 g"></div> <span>Correspondance parfaite</span></div>
+        <div class="legend-row"><div class="lb2 y"></div> <span>Partiellement correct ou proche (biome partagé, valeur proche)</span></div>
+        <div class="legend-row"><div class="lb2 r"></div> <span>Aucune correspondance</span></div>
+        <p style="margin-top:14px;">Les flèches <span class="arrow">▲</span> ou <span class="arrow">▼</span> indiquent si la valeur recherchée est plus haute ou plus basse.</p>
+        <p style="margin-top:14px;color:var(--text-dim);font-size:13px;">En mode <strong style="color:var(--accent2);font-family:var(--font-display);font-size:11px;letter-spacing:.08em;">Quotidien</strong>, vous avez 8 tentatives. Le monstre change chaque jour à minuit.</p>
+        <p style="margin-top:6px;color:var(--text-dim);font-size:13px;">En mode <strong style="color:var(--surv-text);font-family:var(--font-display);font-size:11px;letter-spacing:.08em;">Survie</strong>, enchaînez les victoires pour maximiser votre score.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal bestiaire -->
+  <div class="modal-overlay" id="modal-bestiary" role="dialog" aria-modal="true" aria-labelledby="bestiary-title">
+    <div class="modal-box modal-large">
+      <div class="modal-header">
+        <h2 class="modal-title" id="bestiary-title">
+          Bestiaire <span id="bestiary-count" style="font-size:12px;color:var(--text-dim);font-weight:400;letter-spacing:.05em;"></span>
+        </h2>
+        <button class="modal-close" data-modal="modal-bestiary" aria-label="Fermer">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="bestiary-filters">
+          <input type="text"  id="bestiary-search" placeholder="Rechercher un monstre..." autocomplete="off">
+          <select id="bestiary-gen"><option  value="">Toutes les générations</option></select>
+          <select id="bestiary-class"><option value="">Toutes les classes</option></select>
+        </div>
+        <div id="bestiary-grid" role="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"  defer></script>
+  <script src="js/app.js"   defer></script>
 </body>
 </html>
