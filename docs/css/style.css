@@ -834,8 +834,8 @@ body.survival-mode .guess-btn:hover { background: var(--surv-hover); }
   h1             { font-size: 20px; }
   main           { gap: 12px; padding: 0 10px 32px; }
   .header-banner { height: 140px; }
-  .guess-input   { font-size: 13px; padding: 11px 14px; }
-  .guess-btn     { font-size: 11px; padding: 11px 14px; letter-spacing: .06em; }
+  .guess-input   { font-size: 11px; padding: 9px 11px; }
+  .guess-btn     { font-size: 10px; padding: 9px 12px; letter-spacing: .05em; }
 
   #theme-toggle          { font-size: 10px; padding: 6px 9px; }
   #theme-toggle .t-label { display: none; }
